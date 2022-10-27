@@ -1,0 +1,14 @@
+resources:
+  repositories:
+    - repository: sap-automation
+      type: git
+      name: sap_deployment_automation/sap-automation
+      ref: refs/heads/experimental
+
+parameters:
+  - name: stages
+    type: stageList
+    default: []
+
+stages:
+  - ${{ parameters.stages }}
