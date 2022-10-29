@@ -1,25 +1,31 @@
-name: Deploying the SAP Workload zone defined in $(workload_zone_folder)
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Deploys the Workload Zone                                                    |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+
+name:                                  Deploying the SAP Workload zone defined in $(workload_zone_folder)
 
 parameters:
-  - name: workload_zone
-    displayName: "Workload zone configuration name, use the following syntax: ENV-LOCA-VNET-INFRASTRUCTURE"
-    type: string
-    default: DEV-WEEU-SAP01-INFRASTRUCTURE
+  - name:                              workload_zone
+    displayName:                       "Workload zone configuration name, use the following syntax: ENV-LOCA-VNET-INFRASTRUCTURE"
+    type:                              string
+    default:                           DEV-WEEU-SAP01-INFRASTRUCTURE
 
-  - name: workload_environment_parameter
-    displayName: Workload Environment (DEV, QUA, PRD, ...)
-    type: string
-    default: DEV
+  - name:                              workload_environment_parameter
+    displayName:                       Workload Environment (DEV, QUA, PRD, ...)
+    type:                              string
+    default:                           DEV
 
-  - name: deployer_environment_parameter
-    displayName: Deployer Environment name (MGMT, DEV, QA, PRD, ...)
-    type: string
-    default: MGMT
+  - name:                              deployer_environment_parameter
+    displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
+    type:                              string
+    default:                           MGMT
 
-  - name: deployer_region_parameter
-    displayName: Deployer region name code (MGMT, DEV, QA, PRD, ...)
-    type: string
-    default: WEEU
+  - name:                              deployer_region_parameter
+    displayName:                       Deployer region name code (MGMT, DEV, QA, PRD, ...)
+    type:                              string
+    default:                           WEEU
     values:
       - AUCE
       - AUC2
@@ -69,26 +75,33 @@ parameters:
       - WEUS
       - WUS2
 
-  - name: inherit_settings
-    displayName: Inherit Terraform state file information from control plane
-    type: boolean
-    default: true
+  - name:                              inherit_settings
+    displayName:                       Inherit Terraform state file information from control plane
+    type:                              boolean
+    default:                           true
 
 trigger: none
 
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 02-sap-workload-zone.yaml from the code repository                     |
+# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+
 pool:
-  name: $[coalesce(variables['POOL'], variables['Agent'])]
+  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
 
 extends:
-  template: ./resources.yml
+  template:                            ./resources.yml
   parameters:
     stages:
-      - template: deploy\pipelines\02-sap-workload-zone.yaml@sap-automation
+      - template:                      deploy\pipelines\02-sap-workload-zone.yaml@sap-automation
         parameters:
-          workload_zone: ${{ parameters.workload_zone }}
-          workload_environment_parameter: ${{ parameters.workload_environment_parameter }}
-          deployer_environment_parameter: ${{ parameters.deployer_environment_parameter }}
-          deployer_region_parameter: ${{ parameters.deployer_region_parameter }}
-          inherit_settings: ${{ parameters.inherit_settings }}
-          sap_automation_repo_path: $(Build.SourcesDirectory)/sap-automation
-          config_repo_path: $(Build.SourcesDirectory)/config
+          workload_zone:               ${{ parameters.workload_zone }}
+          workload_environment:        ${{ parameters.workload_environment_parameter }}
+          deployer_environment:        ${{ parameters.deployer_environment_parameter }}
+          deployer_region:             ${{ parameters.deployer_region_parameter }}
+          inherit_settings:            ${{ parameters.inherit_settings }}
+          sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:            $(Build.SourcesDirectory)/config

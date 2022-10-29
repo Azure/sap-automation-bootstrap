@@ -1,29 +1,42 @@
-name: SAP Infrastructure Deployment $(sap_system_folder)
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Deploys the Infrastructure for the SAP System                                |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+
+name:                                  SAP Infrastructure Deployment $(sap_system_folder)
 
 parameters:
-  - name: sap_system
-    displayName: "SAP System configuration name, use the following syntax: ENV-LOCA-VNET-SID"
-    type: string
-    default: DEV-WEEU-SAP01-X00
+  - name:                              sap_system
+    displayName:                       "SAP System configuration name, use the following syntax: ENV-LOCA-VNET-SID"
+    type:                              string
+    default:                           DEV-WEEU-SAP01-X00
 
-  - name: environment
-    displayName: Workload Environment (DEV, QUA, PRD, ...)
-    type: string
-    default: DEV
+  - name:                              environment
+    displayName:                       Workload Environment (DEV, QA, PRD, ...)
+    type:                              string
+    default:                           DEV
 
 trigger: none
 
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 03-sap-system-deployment from the code repository                      |
+# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+
 pool:
-  name: $[coalesce(variables['POOL'], variables['Agent'])]
-  vmImage: ubuntu-latest
+  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
+  vmImage:                             ubuntu-latest
 
 extends:
-  template: ./resources.yml
+  template:                            ./resources.yml
   parameters:
     stages:
-      - template: deploy\pipelines\03-sap-system-deployment.yaml@sap-automation
+      - template:                      deploy\pipelines\03-sap-system-deployment.yaml@sap-automation
         parameters:
-          sap_system: ${{ parameters.sap_system }}
-          environment: ${{ parameters.environment }}
-          sap_automation_repo_path: $(Build.SourcesDirectory)/sap-automation
-          config_repo_path: $(Build.SourcesDirectory)/config
+          sap_system:                  ${{ parameters.sap_system }}
+          environment:                 ${{ parameters.environment }}
+          sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:            $(Build.SourcesDirectory)/config

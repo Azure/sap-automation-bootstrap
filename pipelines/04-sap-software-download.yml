@@ -1,8 +1,13 @@
-name: SAP Software download $(bom) $(environment_code) $(location_code)
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Download the software from SAP                                               |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+name:                                  SAP Software download $(bom) $(environment_code) $(location_code)
 
 parameters:
-  - name: bom_base_name
-    displayName: Name of Bill of Materials (BoM)
+  - name:                              bom_base_name
+    displayName:                       Name of Bill of Materials (BoM)
     type: string
     default:
     values:
@@ -24,36 +29,43 @@ parameters:
       - ORACLE_19_00_ORA_MSID_v0001ms
       - ORACLE_19_00_ORA_MSID_v0002ms
       - ERP6_EHP8_WIN_MSS2019_v0001ms
+      - NW_MSSQL_v0001ms
 
-  - name: environment
-    displayName: Control Plane Environment
-    default: MGMT
+  - name:                              environment
+    displayName:                       Control Plane Environment
+    default:                           MGMT
 
-  - name: region
-    displayName: Control Plane (SAP Library) location code
-    type: string
-    default: WEEU
+  - name:                              region
+    displayName:                       Control Plane (SAP Library) location code
+    type:                              string
+    default:                           WEEU
 
-  - name: re_download
-    displayName: Re-download software from SAP
-    type: boolean
-    default: false
+  - name:                              re_download
+    displayName:                       Re-download software from SAP
+    type:                              boolean
+    default:                           false
 
-trigger: none
+trigger:                               none
+
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 04-sap-software-download.yaml from the code repository                 |
+# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
 
 pool:
-  name: $[coalesce(variables['POOL'], variables['Agent'])]
-  vmImage: ubuntu-latest
+  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
 
 extends:
-  template: ./resources.yml
+  template:                            ./resources.yml
   parameters:
     stages:
-      - template: deploy\pipelines\04-sap-software-download.yaml@sap-automation
+      - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
         parameters:
-          bom_base_name: ${{ parameters.bom_base_name }}
-          environment: ${{ parameters.environment }}
-          region: ${{ parameters.region }}
-          re_download: ${{ parameters.re_download }}
-          sap_automation_repo_path: $(Build.SourcesDirectory)/sap-automation
-          config_repo_path: $(Build.SourcesDirectory)/config
+          bom_base_name:               ${{ parameters.bom_base_name }}
+          environment:                 ${{ parameters.environment }}
+          region:                      ${{ parameters.region }}
+          re_download:                 ${{ parameters.re_download }}
+          sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:            $(Build.SourcesDirectory)/config
