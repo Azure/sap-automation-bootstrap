@@ -60,6 +60,15 @@ parameters:
       - WEIN
       - WEUS
       - WUS2
+  - name:                              firewall
+    displayName:                       Deploy Azure Firewall
+    type:                              boolean
+    default:                           true
+
+  - name:                              bastion
+    displayName:                       Deploy Azure Bastion Service
+    type:                              boolean
+    default:                           true
 
 variables:
   - name:                              deployer_environment
@@ -79,6 +88,12 @@ variables:
 
   - name:                              library_file
     value:                             ${{ format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter) }}
+
+  - name:                              deploy_firewall
+    value:                             ${{ format('firewall_deployment = {0}', lower(parameters.firewall)) }}
+
+  - name:                              deploy_bastion
+    value:                             ${{ format('bastion_deployment = {0}', lower(parameters.bastion)) }}
 
 stages:
   - stage:                             Create_Configuration
@@ -170,10 +185,10 @@ stages:
                             Add-Content $(deployer_file) "management_network_address_space = ""10.170.20.0/24"""
                             Add-Content $(deployer_file) "management_subnet_address_prefix = ""10.170.20.64/28"""
 
-                            Add-Content $(deployer_file) "firewall_deployment = true"
+                            Add-Content $(deployer_file) "$(deploy_firewall)"
                             Add-Content $(deployer_file) "management_firewall_subnet_address_prefix = ""10.170.20.0/26"""
 
-                            Add-Content $(deployer_file) "bastion_deployment = true"
+                            Add-Content $(deployer_file) "$(deploy_bastion)"
                             Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
 
                             Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.80/28"""
@@ -200,10 +215,10 @@ stages:
                         Add-Content $(deployer_file) "management_network_address_space = ""10.170.20.0/24"""
                         Add-Content $(deployer_file) "management_subnet_address_prefix = ""10.170.20.64/28"""
 
-                        Add-Content $(deployer_file) "firewall_deployment = true"
+                        Add-Content $(deployer_file) "$(deploy_firewall)"
                         Add-Content $(deployer_file) "management_firewall_subnet_address_prefix = ""10.170.20.0/26"""
 
-                        Add-Content $(deployer_file) "bastion_deployment = true"
+                        Add-Content $(deployer_file) "$(deploy_bastion)"
                         Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
 
                         Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.80/28"""

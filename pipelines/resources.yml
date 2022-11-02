@@ -1,7 +1,7 @@
 resources:
   repositories:
     - repository: sap-automation
-      type: github
+      type: git
       name: sap deployment automation framework/sap-automation
       ref: refs/heads/experimental
 
