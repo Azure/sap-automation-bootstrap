@@ -66,14 +66,14 @@ extends:
     stages:
       - template:                      deploy\pipelines\11-remover-arm-fallback.yaml@sap-automation
         parameters:
-          sap_automation_repo_path:       $(Build.SourcesDirectory)/sap-automation
-          config_repo_path:               $(Build.SourcesDirectory)/config
-          cleanup_sap:                    ${{ parameters.cleanup_sap }}
-          sap_system:                     ${{ parameters.sap_system }}
-          cleanup_workload_zone:          ${{ parameters.cleanup_workload_zone }}
-          workload_zone:                  ${{ parameters.workload_zone }}
-          cleanup_control_plane:          ${{ parameters.cleanup_control_plane }}
-          deployer:                       ${{ parameters.deployer }}
-          library:                        ${{ parameters.library }}
-          workload_environment_parameter: ${{ parameters.workload_environment }}
-          deployer_environment_parameter: ${{ parameters.deployer_environment }}
+          sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:            $(Build.SourcesDirectory)/config
+          cleanup_sap:                 ${{ parameters.cleanup_sap }}
+          sap_system:                  ${{ parameters.sap_system }}
+          cleanup_workload_zone:       ${{ parameters.cleanup_workload_zone }}
+          workload_zone:               ${{ parameters.workload_zone }}
+          cleanup_control_plane:       ${{ parameters.cleanup_control_plane }}
+          deployer:                    ${{ parameters.deployer }}
+          library:                     ${{ parameters.library }}
+          workload_environment:        ${{ parameters.workload_environment_parameter }}
+          deployer_environment:        ${{ parameters.deployer_environment_parameter }}

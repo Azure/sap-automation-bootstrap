@@ -38,11 +38,9 @@ parameters:
     type:                              boolean
     default:                           false
 
+variables:
 
-  - name:                              connection_name
-    displayName:                       Service Connection Name
-    type:                              string
-    default:                           Control_Plane_Service_Connection
+- group:                               SDAF-${{ parameters.environment }}
 
 trigger:                               none
 
@@ -54,7 +52,6 @@ trigger:                               none
 
 extends:
   template:                            ./resources.yml
-  
   parameters:
     stages:
       - template:                      deploy\pipelines\01-deploy-control-plane.yaml@sap-automation
@@ -67,5 +64,4 @@ extends:
           deploy_webapp_software:      ${{ parameters.deploy_webapp_software }}
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
-          connection_name:             ${{ parameters.connection_name }}
-    
+          connection_name:             $(AZURE_CONNECTION_NAME)
