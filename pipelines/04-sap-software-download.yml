@@ -58,7 +58,7 @@ pool:
   name:                                $[coalesce(variables['POOL'], variables['Agent'])]
 
 extends:
-  template:                            ./resources.yml
+  template:                            ./resources_including_samples
   parameters:
     stages:
       - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
@@ -69,3 +69,4 @@ extends:
           re_download:                 ${{ parameters.re_download }}
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
+          sample_repo_path:            $(Build.SourcesDirectory)/samples
