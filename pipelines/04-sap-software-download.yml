@@ -58,7 +58,7 @@ pool:
   name:                                $[coalesce(variables['POOL'], variables['Agent'])]
 
 extends:
-  template:                            ./resources_including_samples
+  template:                            ./resources_including_samples.yml
   parameters:
     stages:
       - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
