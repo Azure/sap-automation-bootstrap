@@ -59,13 +59,13 @@ parameters:
     type:                              boolean
     default:                           true
 
-  - name:                              database_install
-    displayName:                       Database Installation
+  - name:                              scs_installation
+    displayName:                       SCS Installation
     type:                              boolean
     default:                           true
 
-  - name:                              scs_installation
-    displayName:                       SCS Installation
+  - name:                              database_install
+    displayName:                       Database Installation
     type:                              boolean
     default:                           true
 

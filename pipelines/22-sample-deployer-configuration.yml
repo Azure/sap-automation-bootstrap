@@ -103,6 +103,7 @@ variables:
   - name:                              deployer_count
     value:                             ${{ format('deployer_count = {0}', parameters.deployer_count) }}
 
+trigger:                               none
 
 stages:
   - stage:                             Create_Configuration
