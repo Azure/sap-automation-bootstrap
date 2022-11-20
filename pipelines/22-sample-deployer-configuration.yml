@@ -1,7 +1,5 @@
 name:                                  Create Deployer Configuration
 
-trigger:                               none
-
 parameters:
   - name:                              deployer_environment_parameter
     displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
