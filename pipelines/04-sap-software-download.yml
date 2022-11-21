@@ -45,8 +45,6 @@ parameters:
     type:                              boolean
     default:                           false
 
-trigger:                               none
-
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 04-sap-software-download.yaml from the code repository                 |

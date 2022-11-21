@@ -116,8 +116,6 @@ parameters:
       - Other
 # 20220929 MKD - ACSS Registration <END>
 
-trigger: none
-
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 05-DB-and-SAP-installation.yaml from the code repository               |

@@ -80,8 +80,6 @@ parameters:
     type:                              boolean
     default:                           true
 
-trigger: none
-
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 02-sap-workload-zone.yaml from the code repository                     |

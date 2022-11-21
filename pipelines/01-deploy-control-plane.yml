@@ -42,8 +42,6 @@ variables:
 
 - group:                               SDAF-${{ parameters.environment }}
 
-trigger:                               none
-
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 01-deploy-control-plane.yaml from the code repository                  |

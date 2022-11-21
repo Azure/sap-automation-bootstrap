@@ -17,8 +17,6 @@ parameters:
     type:                              string
     default:                           DEV
 
-trigger: none
-
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 03-sap-system-deployment from the code repository                      |
