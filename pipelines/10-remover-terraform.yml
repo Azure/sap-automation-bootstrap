@@ -44,6 +44,8 @@ parameters:
     type:                              boolean
     default:                           true
 
+trigger:                               none
+
 pool:
   name:                                $[coalesce(variables['run_on'], variables['Agent'])]
 

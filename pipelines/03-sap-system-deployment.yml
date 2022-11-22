@@ -23,6 +23,7 @@ parameters:
 # If an Agent pool is defined it will be used otherwise Microsoft hosted       |
 #                                                                              |
 #--------------------------------------+---------------------------------------8
+trigger:                               none
 
 pool:
   name:                                $[coalesce(variables['POOL'], variables['Agent'])]

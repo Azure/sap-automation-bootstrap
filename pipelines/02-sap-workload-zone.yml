@@ -87,6 +87,8 @@ parameters:
 #                                                                              |
 #--------------------------------------+---------------------------------------8
 
+trigger:                               none
+
 pool:
   name:                                $[coalesce(variables['POOL'], variables['Agent'])]
 
