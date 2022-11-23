@@ -33,6 +33,8 @@ parameters:
     type:                              boolean
     default:                           false
 
+trigger:                               none
+
 pool:
   vmImage:                             ubuntu-latest
 
