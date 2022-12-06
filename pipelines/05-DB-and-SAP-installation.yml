@@ -152,3 +152,4 @@ extends:
           acss_sap_product:                ${{ parameters.acss_sap_product }}
           sap_automation_repo_path:        $(Build.SourcesDirectory)/sap-automation
           config_repo_path:                $(Build.SourcesDirectory)/config
+          extra_params:                    ${{ parameters.extra_params }}
