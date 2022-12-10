@@ -41,6 +41,11 @@ parameters:
     type:                              string
     default:                           WEEU
 
+  - name:                              extra_params
+    displayName:                       Extra Parameters
+    type:                              string
+    default:                           " "
+
   - name:                              re_download
     displayName:                       Re-download software from SAP
     type:                              boolean
@@ -71,4 +76,4 @@ extends:
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
           sample_repo_path:            $(Build.SourcesDirectory)/samples
-          extra_params:                ${{ parameters.extra_params }}
+          ExtraParams:                 ${{ parameters.extra_params }}
