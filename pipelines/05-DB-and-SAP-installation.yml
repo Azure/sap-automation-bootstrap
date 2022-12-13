@@ -35,6 +35,7 @@ parameters:
       - NW752SPS09_v0001ms
       - ORACLE_19_00_v0002ms
       - ORACLE_19_00_v0003ms
+      - ORACLE_19_00_ASM_v0001ms      
       - NW750SPS20_DB2_v0001ms
       - ORACLE_19_00_ORA_MSID_v0002ms
       - ERP6_EHP8_WIN_MSS2019_v0001ms
@@ -116,6 +117,31 @@ parameters:
       - ECC
       - Other
 # 20220929 MKD - ACSS Registration <END>
+
+  - name:                              sapadm_uid
+    displayName:                       SAP sidadm ID (UID)
+    type:                              string
+    default:                           "2100"
+
+  - name:                              sapinst_gid
+    displayName:                       sapinst group ID (GID)
+    type:                              string
+    default:                           "2001"
+
+  - name:                              ora_release
+    displayName:                       Oracle Release
+    type:                              string
+    default:                           "19"
+
+  - name:                              ora_version
+    displayName:                       Oracle Version
+    type:                              string
+    default:                           "19.0.0"
+
+  - name:                              oracle_sbp_patch
+    displayName:                       Oracle SBP Patch file name
+    type:                              string
+    default:                           ""
 
 #--------------------------------------+---------------------------------------8
 #                                                                              |
