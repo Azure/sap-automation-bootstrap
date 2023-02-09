@@ -38,8 +38,6 @@
       value:                             ${{ parameters.repository }}
     - name:                              branch
       value:                             ${{ parameters.branch }}
-    - name:                              tag
-      value:                             ${{ parameters.tag }}
     - name:                              force
       value:                             ${{ parameters.force }}
     - name:                              log
@@ -63,11 +61,10 @@
                 git config --global pull.ff false
                 git config --global pull.rebase false
 
-                git pull -q
-
                 git remote add remote-repo $(repository)
 
                 git fetch --all --tags
+                git checkout main
 
                 git checkout remote-repo/main ./pipelines/01-deploy-control-plane.yml
                 git checkout remote-repo/main ./pipelines/02-sap-workload-zone.yml
@@ -76,10 +73,10 @@
                 git checkout remote-repo/main ./pipelines/05-DB-and-SAP-installation.yml
                 git checkout remote-repo/main ./pipelines/10-remover-terraform.yml
                 git checkout remote-repo/main ./pipelines/11-remover-arm-fallback.yml
-                git checkout remote-repo/main ./pipelines/13-remove-control-plane.yml
+                git checkout remote-repo/main ./pipelines/12-remove-control-plane.yml
                 git checkout remote-repo/main ./pipelines/20-update-repositories.yml
                 git checkout remote-repo/main ./pipelines/22-sample-deployer-configuration.yml
-                git checkout remote-repo/main ./pipelines/23-update-pipelines.yml
+                git checkout remote-repo/main ./pipelines/21-update-pipelines.yml
                 return_code=$?
 
                 if [[ "$(force)" == "True" ]]; then
