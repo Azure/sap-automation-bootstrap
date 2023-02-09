@@ -4,35 +4,35 @@
   # |               This pipeline updates the ADO repository                     |
   # |                                                                            |
   # +------------------------------------4--------------------------------------*/
-  
+
   name:                                  Update Azure DevOps repository from GitHub $(branch) branch
-  
+
   parameters:
     - name:                              repository
       displayName:                       Source repository
       type:                              string
       default:                           https://github.com/Azure/sap-automation-bootstrap.git
-  
+
     - name:                              branch
       displayName:                       Source branch to update from
       type:                              string
       default:                           main
-  
+
     - name:                              tag
       displayName:                       Git tag to fetch
       type:                              string
       default:                           latest
-  
+
     - name:                              force
       displayName:                       Force the update
       type:                              boolean
       default:                           false
-  
+
   trigger:                               none
-  
+
   pool:
     vmImage:                             ubuntu-latest
-  
+
   variables:
     - name:                              repository
       value:                             ${{ parameters.repository }}
@@ -44,71 +44,70 @@
       value:                             ${{ parameters.force }}
     - name:                              log
       value:                             logfile_$(Build.BuildId)
-  
+
   stages:
     - stage:                             Update_ADO_repository
-      displayName:                       Update Azure DevOps code repository from GitHub $(branch) branch
+      displayName:                       Update ADO repository
       jobs:
         - job:                           Update_ADO_repository
           displayName:                   Update ADO repository
           steps:
-            - checkout:                  sap-automation
-              fetchDepth: 0
+            - checkout:                  self
               persistCredentials:        true
             - bash: |
                 #!/bin/bash
                 green="\e[1;32m" ; reset="\e[0m" ; boldred="\e[1;31m"
-  
+
                 git config --global user.email "$(Build.RequestedForEmail)"
                 git config --global user.name "$(Build.RequestedFor)"
                 git config --global pull.ff false
                 git config --global pull.rebase false
-                git config --global checkout.defaultRemote origin
-  
+
+                git pull -q
+
                 git remote add remote-repo $(repository)
-  
-                git fetch --all --tags  >> /tmp/$(log) 2>&1
-               
-                git checkout -q $(branch)
-  
-                git pull -q  remote-repo $(branch) >> /tmp/$(log) 2>&1
+
+                git fetch --all --tags
+
+                git checkout remote-repo/main ./pipelines/01-deploy-control-plane.yml
+                git checkout remote-repo/main ./pipelines/02-sap-workload-zone.yml
+                git checkout remote-repo/main ./pipelines/03-sap-system-deployment.yml
+                git checkout remote-repo/main ./pipelines/04-sap-software-download.yml
+                git checkout remote-repo/main ./pipelines/05-DB-and-SAP-installation.yml
+                git checkout remote-repo/main ./pipelines/10-remover-terraform.yml
+                git checkout remote-repo/main ./pipelines/11-remover-arm-fallback.yml
+                git checkout remote-repo/main ./pipelines/13-remove-control-plane.yml
+                git checkout remote-repo/main ./pipelines/20-update-repositories.yml
+                git checkout remote-repo/main ./pipelines/22-sample-deployer-configuration.yml
+                git checkout remote-repo/main ./pipelines/23-update-pipelines.yml
                 return_code=$?
-                git status
-  
-                cat /tmp/$(log)
-  
-                grep CONFLICT /tmp/$(log) | while read -r conflict ; do
-                  echo $conflict
-                  echo "##vso[task.logissue type=error]$conflict"
-                done
-  
+
                 if [[ "$(force)" == "True" ]]; then
                   echo "running git push to ADO with force option"
-                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch)
+                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch)  >> /tmp/$(log) 2>&1
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
                   fi
                 else
+                  git commit -m "Update ADO repository from GitHub $(branch) branch" -a
                   echo "running git push to ADO"
                   if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
                   fi
-  
+
                 fi
                 # If Pull already failed then keep that error code
                 if [ 0 != $return_code ]; then
                   return_code=$?
                 fi
-  
+
                 exit $return_code
-  
+
               displayName:               Update ADO repository
               env:
                 SYSTEM_ACCESSTOKEN:      $(System.AccessToken)
-              failOnStderr:              false
-  
+              failOnStderr:              true
 ...
-  
