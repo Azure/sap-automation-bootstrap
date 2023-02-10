@@ -39,10 +39,10 @@
       value:                             logfile_$(Build.BuildId)
 
   stages:
-    - stage:                             Update_ADO_repository
-      displayName:                       Update ADO repository
+    - stage:                             Update_DEVOPS_repository
+      displayName:                       Update DevOps pipelines
       jobs:
-        - job:                           Update_ADO_repository
+        - job:                           Update_DEVOPS_repository
           displayName:                   Update DevOps pipelines
           steps:
             - checkout:                  self
@@ -56,9 +56,9 @@
                 git config --global pull.ff false
                 git config --global pull.rebase false
 
-                git remote add remote-repo $(repository)
+                git remote add remote-repo $(repository) >> /tmp/$(log) 2>&1
 
-                git fetch --all --tags
+                git fetch --all --tags >> /tmp/$(log) 2>&1
                 git checkout --quiet origin/main
 
                 git checkout --quiet remote-repo/main ./pipelines/01-deploy-control-plane.yml
@@ -76,7 +76,7 @@
 
                 if [[ "$(force)" == "True" ]]; then
                   echo "running git push to ADO with force option"
-                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch)
+                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch) >> /tmp/$(log) 2>&1
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
@@ -84,7 +84,7 @@
                 else
                   git commit -m "Update ADO repository from GitHub $(branch) branch" -a
                   echo "running git push to ADO"
-                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push origin HEAD:$(branch)
+                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push origin HEAD:$(branch) >> /tmp/$(log) 2>&1
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
@@ -98,7 +98,7 @@
 
                 exit $return_code
 
-              displayName:               Update ADO repository
+              displayName:               Update DevOps pipelines
               env:
                 SYSTEM_ACCESSTOKEN:      $(System.AccessToken)
               failOnStderr:              true
