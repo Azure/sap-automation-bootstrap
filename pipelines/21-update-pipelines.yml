@@ -18,11 +18,6 @@
       type:                              string
       default:                           main
 
-    - name:                              tag
-      displayName:                       Git tag to fetch
-      type:                              string
-      default:                           latest
-
     - name:                              force
       displayName:                       Force the update
       type:                              boolean
@@ -48,7 +43,7 @@
       displayName:                       Update ADO repository
       jobs:
         - job:                           Update_ADO_repository
-          displayName:                   Update ADO repository
+          displayName:                   Update DevOps pipelines
           steps:
             - checkout:                  self
               persistCredentials:        true
@@ -64,24 +59,24 @@
                 git remote add remote-repo $(repository)
 
                 git fetch --all --tags
-                git checkout main
+                git checkout --quiet origin/main
 
-                git checkout remote-repo/main ./pipelines/01-deploy-control-plane.yml
-                git checkout remote-repo/main ./pipelines/02-sap-workload-zone.yml
-                git checkout remote-repo/main ./pipelines/03-sap-system-deployment.yml
-                git checkout remote-repo/main ./pipelines/04-sap-software-download.yml
-                git checkout remote-repo/main ./pipelines/05-DB-and-SAP-installation.yml
-                git checkout remote-repo/main ./pipelines/10-remover-terraform.yml
-                git checkout remote-repo/main ./pipelines/11-remover-arm-fallback.yml
-                git checkout remote-repo/main ./pipelines/12-remove-control-plane.yml
-                git checkout remote-repo/main ./pipelines/20-update-repositories.yml
-                git checkout remote-repo/main ./pipelines/22-sample-deployer-configuration.yml
-                git checkout remote-repo/main ./pipelines/21-update-pipelines.yml
+                git checkout --quiet remote-repo/main ./pipelines/01-deploy-control-plane.yml
+                git checkout --quiet remote-repo/main ./pipelines/02-sap-workload-zone.yml
+                git checkout --quiet remote-repo/main ./pipelines/03-sap-system-deployment.yml
+                git checkout --quiet remote-repo/main ./pipelines/04-sap-software-download.yml
+                git checkout --quiet remote-repo/main ./pipelines/05-DB-and-SAP-installation.yml
+                git checkout --quiet remote-repo/main ./pipelines/10-remover-terraform.yml
+                git checkout --quiet remote-repo/main ./pipelines/11-remover-arm-fallback.yml
+                git checkout --quiet remote-repo/main ./pipelines/12-remove-control-plane.yml
+                git checkout --quiet remote-repo/main ./pipelines/20-update-repositories.yml
+                git checkout --quiet remote-repo/main ./pipelines/22-sample-deployer-configuration.yml
+                git checkout --quiet remote-repo/main ./pipelines/21-update-pipelines.yml
                 return_code=$?
 
                 if [[ "$(force)" == "True" ]]; then
                   echo "running git push to ADO with force option"
-                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch)  >> /tmp/$(log) 2>&1
+                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --force origin HEAD:$(branch)
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
@@ -89,7 +84,7 @@
                 else
                   git commit -m "Update ADO repository from GitHub $(branch) branch" -a
                   echo "running git push to ADO"
-                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push
+                  if ! git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push origin HEAD:$(branch)
                   then
                      echo -e "$red--- Failed to push ---$reset"
                      exit 1
