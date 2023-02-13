@@ -17,6 +17,11 @@ parameters:
     type:                              string
     default:                           DEV
 
+  - name:                              test
+    displayName:                       Test only
+    type:                              boolean
+    default:                           false
+
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 03-sap-system-deployment from the code repository                      |
@@ -39,3 +44,4 @@ extends:
           environment:                 ${{ parameters.environment }}
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
+          test:                        ${{ parameters.test }}
