@@ -80,6 +80,11 @@ parameters:
     type:                              boolean
     default:                           true
 
+  - name:                              test
+    displayName:                       Test only
+    type:                              boolean
+    default:                           false
+
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 02-sap-workload-zone.yaml from the code repository                     |
@@ -105,3 +110,5 @@ extends:
           inherit_settings:            ${{ parameters.inherit_settings }}
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
+          test:                        ${{ parameters.test }}
+          
