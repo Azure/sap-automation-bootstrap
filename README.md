@@ -6,10 +6,10 @@ It will also contain the Terraform configuration files used for deploying the in
 
 ## How it works
 
-During software acquisition both the sample repositories and the sap-automation repositories need to be present on the deployer-agent. Each of the repositories will be mapped using the following:
+During pipeline execution the two repositories will be present on the deployer-agent. Each of the repositories will be mapped using the following:
 
 - sap-automation will be mapped to ```/sap-automation```
-- sample repository will be mapped to ```/samples```
+- customer configuration repository will be mapped to ```/config```
 
 During execution the repositories will interact with each other by using the following:
 
@@ -17,9 +17,9 @@ During execution the repositories will interact with each other by using the fol
 flowchart LR
     subgraph deployer-agent
         pipeline--uses-->templated-pipelines
-        templated-pipelines--uses-->sample-BoMs        
-        subgraph sample repository
-            BoM samples
+        templated-pipelines--uses-->workspace-configuration
+        subgraph customer repository
+            workspace-configuration
             pipeline
         end
         subgraph sap-automation
