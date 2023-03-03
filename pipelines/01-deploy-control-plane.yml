@@ -38,6 +38,11 @@ parameters:
     type:                              boolean
     default:                           false
 
+  - name:                              reset
+    displayName:                       Force a re-install - may require multiple re-runs
+    type:                              boolean
+    default:                           false
+
 trigger:                               none
 
 
@@ -66,3 +71,4 @@ extends:
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
           connection_name:             $(AZURE_CONNECTION_NAME)
+          reset:                       ${{ parameters.reset }}
