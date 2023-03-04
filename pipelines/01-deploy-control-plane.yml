@@ -71,4 +71,4 @@ extends:
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
           connection_name:             $(AZURE_CONNECTION_NAME)
-          reset:                       ${{ parameters.reset }}
+          force_reset:                 ${{ parameters.reset }}
