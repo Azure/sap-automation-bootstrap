@@ -60,6 +60,9 @@ trigger:                               none
 pool:
   vmImage:                             ubuntu-latest
 
+
+variables:
+  - group:                             SDAF-${{ parameters.workload_environment_parameter }}
 extends:
   template:                            ./resources.yml
   parameters:
@@ -77,3 +80,4 @@ extends:
           library:                     ${{ parameters.library }}
           workload_environment:        ${{ parameters.workload_environment_parameter }}
           deployer_environment:        ${{ parameters.deployer_environment_parameter }}
+          workload_zone_connection:    $(AZURE_CONNECTION_NAME)
