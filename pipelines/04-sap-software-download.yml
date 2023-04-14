@@ -26,6 +26,7 @@ parameters:
       - NW750SPS20_v0004ms
       - NW752SPS09_v0001ms
       - NW750SPS20_DB2_v0001ms
+      - NW750_MSSQL_v0001ms
       - NW750SPS20_SYBASE_v0001ms
       - NW750SPS25_JAVA_v0001ms
       - ORACLE_19_00_v0003ms
@@ -36,7 +37,6 @@ parameters:
       - ERP6_EHP8_WIN_MSS2019_v0001ms
       - ERP6_EHP8_WIN_MSS2016_v0001ms
       - ERP6_EHP8_LNX_DB2UDB_11_5_v0001ms
-      - NW_MSSQL_v0001ms
 
   - name:                              environment
     displayName:                       Control Plane Environment
