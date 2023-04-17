@@ -27,6 +27,7 @@ parameters:
       - NW752SPS09_v0001ms
       - NW750SPS20_DB2_v0001ms
       - NW750_MSSQL_v0001ms
+      - NW752_MSSQL_v0001ms
       - NW750SPS20_SYBASE_v0001ms
       - NW750_ORACLE_19_ASM_v0001ms
       - NW750SPS25_JAVA_v0001ms
