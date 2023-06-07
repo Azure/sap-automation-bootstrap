@@ -28,6 +28,7 @@ parameters:
       - NW750_HANA_v0004ms
       - NW752SPS09_v0001ms
       - NW750SPS20_DB2_v0001ms
+      - NW750_ORACLE_19_v0001ms
       - NW750_MSSQL_v0001ms
       - NW752_MSSQL_v0001ms
       - NW750SPS20_SYBASE_v0001ms
