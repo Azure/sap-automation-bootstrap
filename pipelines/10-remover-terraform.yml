@@ -22,7 +22,7 @@ parameters:
   - name:                              cleanup_zone
     displayName:                       Remove the SAP workload zone
     type:                              boolean
-    default:                           true
+    default:                           false
 
   - name:                              workload_zone
     displayName:                       "SAP workload zone configuration name, use this format: ENV-LOCA-VNET-INFRASTRUCTURE"
