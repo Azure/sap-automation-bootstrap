@@ -11,6 +11,7 @@ parameters:
     type: string
     default:
     values:
+      - S4HANA_2022_FP02_v0001ms
       - S4HANA_2021_ISS_v0001ms
       - S4HANA_2021_ISS_v0002ms
       - S4HANA_2021_FP01_v0001ms
