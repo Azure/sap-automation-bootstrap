@@ -239,6 +239,8 @@ stages:
 
                         Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
 
+                        Add-Content $(deployer_file) "public_network_access_enabled = true"
+
                         Add-Content $(deployer_file) "$(deployer_count)"
 
                         Add-Content $(deployer_file) "use_service_endpoint = true"
