@@ -78,7 +78,7 @@ parameters:
     default:                           true
 
   - name:                              scs_installation
-    displayName:                       SCS Installation
+    displayName:                       SCS Installation & High Availability Configuration
     type:                              boolean
     default:                           true
 
@@ -93,7 +93,7 @@ parameters:
     default:                           true
 
   - name:                              high_availability_configuration
-    displayName:                       SAP & DB High Availability Setup
+    displayName:                       Database High Availability Configuration
     type:                              boolean
     default:                           true
 
