@@ -98,17 +98,17 @@ parameters:
     default:                           true
 
   - name:                              pas_installation
-    displayName:                       PAS Installation
+    displayName:                       Primary Application Server Installation
     type:                              boolean
     default:                           true
 
   - name:                              application_server_installation
-    displayName:                       APP Installation
+    displayName:                       Application Server Installation
     type:                              boolean
     default:                           true
 
   - name:                              webdispatcher_installation
-    displayName:                       WebDispatcher Installation
+    displayName:                       Web Dispatcher Installation
     type:                              boolean
     default:                           false
 
