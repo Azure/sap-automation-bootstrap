@@ -256,18 +256,20 @@ stages:
                         Add-Content $(deployer_file) "use_service_endpoint = true"
                         Add-Content $(deployer_file) "use_private_endpoint = true"
                         Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
+                        Add-Content $(deployer_file) ""
                         Add-Content $(deployer_file) "$(use_spn)"
+                        Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
 
                         Add-Content $(deployer_file) ""
  
                         Add-Content $(deployer_file) "deployer_image = {"
-                        Add-Content $(deployer_file) "  os_type         = 'LINUX',"
-                        Add-Content $(deployer_file) "  type            = 'marketplace',"
-                        Add-Content $(deployer_file) "  source_image_id = ''"
-                        Add-Content $(deployer_file) "  publisher       = 'Canonical',"
-                        Add-Content $(deployer_file) "  offer           = '0001-com-ubuntu-server-jammy',"
-                        Add-Content $(deployer_file) "  sku             = '22_04-lts-gen2',"
-                        Add-Content $(deployer_file) "  version         = 'latest'"
+                        Add-Content $(deployer_file) "  os_type         = ""LINUX"","
+                        Add-Content $(deployer_file) "  type            = ""marketplace"","
+                        Add-Content $(deployer_file) "  source_image_id = """""
+                        Add-Content $(deployer_file) "  publisher       = ""Canonical"","
+                        Add-Content $(deployer_file) "  offer           = ""0001-com-ubuntu-server-jammy"","
+                        Add-Content $(deployer_file) "  sku             = ""22_04-lts-gen2"","
+                        Add-Content $(deployer_file) "  version         = ""latest"""
                         Add-Content $(deployer_file) "}"
 
                         git add -f $(deployer_file)
@@ -320,6 +322,55 @@ stages:
                         git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
 
                     }
+
+                    cd $(Build.Repository.LocalPath)
+                    $FolderName = "pipelines"
+                    $pipeLineName="01-deploy-control-plane.yml"
+                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+
+                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_file)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_file)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+
+                    git add -f $filePath
+                    git commit -m "Update $pipeLineName[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
+                    $pipeLineName="02-sap-workload-zone.yml"
+                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+
+                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+
+                    git add -f $filePath
+                    git commit -m "Update $pipeLineName[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
+                    $pipeLineName="03-sap-system-deployment.yml"
+                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+
+                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+
+                    git add -f $filePath
+                    git commit -m "Update $pipeLineName[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
+                    $pipeLineName="04-sap-software-download.yml"
+                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+
+                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+
+                    git add -f $filePath
+                    git commit -m "Update $pipeLineName[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
+                    
+
 
               failOnStderr:            false
               showWarnings:            true
