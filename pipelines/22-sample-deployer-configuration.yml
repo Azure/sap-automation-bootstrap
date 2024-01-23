@@ -213,6 +213,11 @@ stages:
                             Add-Content $(deployer_file) "use_service_endpoint = true"
                             Add-Content $(deployer_file) "use_private_endpoint = true"
                             Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
+
+                            
+                            Add-Content $(deployer_file) "deployer_assign_subscription_permissions = false"
+
+                            Add-Content $(deployer_file) "public_network_access_enabled = true"
                             
                             Add-Content $(deployer_file) "$(deployer_count)"
 
@@ -247,7 +252,7 @@ stages:
 
                         Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
 
-                        Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
+                        Add-Content $(deployer_file) "deployer_assign_subscription_permissions = false"
 
                         Add-Content $(deployer_file) "public_network_access_enabled = true"
 
