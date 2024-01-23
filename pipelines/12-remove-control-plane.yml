@@ -30,6 +30,11 @@ parameters:
 
 trigger:                               none
 
+
+variables:
+
+  - group:                               SDAF-${{ parameters.deployer_environment }}
+
 pool:
   name:                                $[coalesce(variables['run_on'], variables['Agent'])]
 
@@ -45,3 +50,4 @@ extends:
           library:                     ${{ parameters.library }}
           deployer_environment:        ${{ parameters.deployer_environment }}
           use_deployer:                ${{ parameters.use_deployer }}
+          connection_name:             $(AZURE_CONNECTION_NAME)
