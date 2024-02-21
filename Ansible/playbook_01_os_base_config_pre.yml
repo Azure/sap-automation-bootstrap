@@ -88,25 +88,54 @@
       when: (ansible_distribution | lower ~ ansible_distribution_major_version) in ['sles_sap12']
 
     - name:                            "Show how to run a command on all remote host"
-      ansible.builtin.command:         "whoami"
-      register:                        whoami_results
-
-    - name:                            "Show results"
-      ansible.builtin.debug:
-        var:                           whoami_results
-        verbosity:                     0
-
-    - name:                            "Show how to run a command on just the 'SCS' and 'ERS' hosts"
-      ansible.builtin.command:         "whoami"
-      register:                        whoami_results
       when: 
-        - "'scs' in supported_tiers or 'ers' in supported_tiers "
+        - distro_family != "WINDOWS"
+      block:
 
-    - name:                            "0.0 Validations - Variables"
-      ansible.builtin.debug:
-        var:                           whoami_results
-        verbosity:                     0
+        - name:                        "Show how to run a command on all remote host"
+          ansible.builtin.command:     "whoami"
+          register:                    whoami_results
 
+        - name:                        "Show results"
+          ansible.builtin.debug:
+            var:                       whoami_results
+            verbosity:                 0
+
+        - name:                        "Show how to run a command on just the 'SCS' and 'ERS' hosts"
+          ansible.builtin.command:     "whoami"
+          register:                    whoami_results
+          when: 
+            - "'scs' in supported_tiers or 'ers' in supported_tiers "
+
+        - name:                        "0.0 Validations - Variables"
+          ansible.builtin.debug:
+            var:                       whoami_results
+            verbosity:                 0
+
+    - name:                            "Show how to run a command on all remote host"
+      when: 
+        - distro_family == "WINDOWS"
+      block:
+
+        - name:                        "Show how to run a command on all remote host"
+          ansible.windows.win_shell:   "whoami"
+          register:                    whoami_results
+
+        - name:                        "Show results"
+          ansible.builtin.debug:
+            var:                       whoami_results
+            verbosity:                 0
+
+        - name:                        "Show how to run a command on just the 'SCS' and 'ERS' hosts"
+          ansible.windows.win_shell:   "whoami"
+          register:                    whoami_results
+          when: 
+            - "'scs' in supported_tiers or 'ers' in supported_tiers "
+
+        - name:                        "0.0 Validations - Variables"
+          ansible.builtin.debug:
+            var:                       whoami_results
+            verbosity:                 0
 
 # /*----------------------------------------------------------------------------8
 # |                                    END                                      |
