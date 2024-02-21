@@ -24,14 +24,15 @@ parameters:
     displayName:                       Bill of Materials name
     type:                              string
     values:
+      - S42023SPS00_v0001ms
       - S4HANA_2022_FP02_v0001ms
       - S4HANA_2021_ISS_v0001ms
       - S4HANA_2021_ISS_v0002ms
       - S4HANA_2021_FP01_v0001ms
       - S4HANA_2021_FP01_v0002ms
       - S42022SPS00_v0001ms
-      - S42020SPS04_v0001ms
-      - S41909SPS03_v0011ms
+      - S42020ISS00_v0001ms
+      - S41909ISS00_v0011ms      
       - HCMT_v0002ms
       - BW4HANA2021SPS01_v0003ms
       - HANA_2_00_055_v0006ms
@@ -39,6 +40,7 @@ parameters:
       - HANA_2_00_066_v0001ms
       - HANA_2_00_067_v0004ms
       - HANA_2_00_071_v0001ms
+      - NW750SPS25_v0001ms
       - NW750_HANA_v0004ms
       - NW752SPS09_v0001ms
       - NW750SPS20_DB2_v0001ms
