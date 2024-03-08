@@ -178,7 +178,6 @@ extends:
           application_server_installation: ${{ parameters.application_server_installation }}
           webdispatcher_installation:      ${{ parameters.webdispatcher_installation }}
           post_configuration_actions:      ${{ parameters.post_configuration_actions }}
-          ams_provider:                    ${{ parameters.ams_provider }}
           acss_registration:               ${{ parameters.acss_registration }}
           acss_environment:                ${{ parameters.acss_environment }}
           acss_sap_product:                ${{ parameters.acss_sap_product }}
