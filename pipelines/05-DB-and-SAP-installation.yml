@@ -142,6 +142,10 @@ parameters:
       - ECC
       - Other
 # 20220929 MKD - ACSS Registration <END>
+  - name:                             ams_provider
+    displayName:                      Configure AMS Provider
+    type:                             boolean
+    default:                          false
 
 #--------------------------------------+---------------------------------------8
 #                                                                              |
@@ -178,6 +182,7 @@ extends:
           acss_registration:               ${{ parameters.acss_registration }}
           acss_environment:                ${{ parameters.acss_environment }}
           acss_sap_product:                ${{ parameters.acss_sap_product }}
+          ams_provider:                    ${{ parameters.ams_provider }}
           sap_automation_repo_path:        $(Build.SourcesDirectory)/sap-automation
           config_repo_path:                $(Build.SourcesDirectory)/config
           extra_params:                    ${{ parameters.extra_params }}
