@@ -25,21 +25,10 @@ parameters:
     type:                              string
     values:
       - S42023SPS00_v0001ms
-      - S4HANA_2022_FP02_v0001ms
-      - S4HANA_2021_ISS_v0001ms
-      - S4HANA_2021_ISS_v0002ms
-      - S4HANA_2021_FP01_v0001ms
-      - S4HANA_2021_FP01_v0002ms
       - S42022SPS00_v0001ms
-      - S42020ISS00_v0001ms
+      - S42021ISS00_v0001ms
+      - S42020ISS00_v0003ms
       - S41909ISS00_v0011ms      
-      - HCMT_v0002ms
-      - BW4HANA2021SPS01_v0003ms
-      - HANA_2_00_055_v0006ms
-      - HANA_2_00_059_v0004ms
-      - HANA_2_00_066_v0001ms
-      - HANA_2_00_067_v0004ms
-      - HANA_2_00_071_v0001ms
       - NW750SPS25_v0001ms
       - NW750_HANA_v0004ms
       - NW752SPS09_v0001ms
@@ -50,6 +39,7 @@ parameters:
       - NW750_ORACLE_19_ASM_v0001ms
       - NW750_MSSQL_v0001ms
       - NW752_MSSQL_v0001ms
+      - NW_MSSQL_v0001ms
       - ORACLE_19_00_v0003ms
       - ORACLE_19_00_ASM_v0001ms      
       - DB2_UDB_11_5_v0001ms
@@ -57,7 +47,13 @@ parameters:
       - ERP6_EHP8_WIN_MSS2019_v0001ms
       - ERP6_EHP8_WIN_MSS2016_v0001ms
       - ERP6_EHP8_LNX_DB2UDB_11_5_v0001ms
-      - NW_MSSQL_v0001ms
+      - HCMT_v0002ms
+      - BW4HANA2021SPS01_v0003ms
+      - HANA_2_00_055_v0006ms
+      - HANA_2_00_059_v0004ms
+      - HANA_2_00_066_v0001ms
+      - HANA_2_00_067_v0004ms
+      - HANA_2_00_071_v0001ms
 
   - name:                              extra_params
     displayName:                       Extra Parameters
@@ -119,6 +115,12 @@ parameters:
     type:                              boolean
     default:                           false
 
+  - name:                               ams_provider
+    displayName:                        Configure AMS Provider
+    type:                               boolean
+    default:                            false
+
+
 # 20220929 MKD - ACSS Registration <BEGIN>
   - name:                              acss_registration
     displayName:                       Register System in ACSS
@@ -172,6 +174,7 @@ extends:
           application_server_installation: ${{ parameters.application_server_installation }}
           webdispatcher_installation:      ${{ parameters.webdispatcher_installation }}
           post_configuration_actions:      ${{ parameters.post_configuration_actions }}
+          ams_provider:                    ${{ parameters.ams_provider }}
           acss_registration:               ${{ parameters.acss_registration }}
           acss_environment:                ${{ parameters.acss_environment }}
           acss_sap_product:                ${{ parameters.acss_sap_product }}
