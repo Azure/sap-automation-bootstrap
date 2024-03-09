@@ -142,10 +142,7 @@ parameters:
       - ECC
       - Other
 # 20220929 MKD - ACSS Registration <END>
-  - name:                             ams_provider
-    displayName:                      Configure AMS Provider
-    type:                             boolean
-    default:                          false
+
 
 #--------------------------------------+---------------------------------------8
 #                                                                              |
