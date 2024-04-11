@@ -8,8 +8,7 @@ name:                                  SAP Software download $(bom) $(environmen
 parameters:
   - name:                              bom_base_name
     displayName:                       Name of Bill of Materials (BoM)
-    type: string
-    default:
+    type:                              string
     values:
       - S42023SPS00_v0001ms
       - S42022SPS00_v0001ms
@@ -41,6 +40,10 @@ parameters:
       - HANA_2_00_066_v0001ms
       - HANA_2_00_067_v0004ms
       - HANA_2_00_071_v0001ms
+
+  - name:                              bom_override_name
+    displayName:                       Custom Name of Bill of Materials (BoM)
+    type:                              string
 
   - name:                              environment
     displayName:                       Control Plane Environment
@@ -79,7 +82,7 @@ extends:
     stages:
       - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
         parameters:
-          bom_base_name:               ${{ parameters.bom_base_name }}
+          bom_base_name:               ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), parameters.bom_base_name )],' ','') }}
           environment:                 ${{ parameters.environment }}
           region:                      ${{ parameters.region }}
           re_download:                 ${{ parameters.re_download }}

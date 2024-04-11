@@ -55,6 +55,10 @@ parameters:
       - HANA_2_00_067_v0004ms
       - HANA_2_00_071_v0001ms
 
+  - name:                              bom_override_name
+    displayName:                       Custom Name of Bill of Materials (BoM)
+    type:                              string
+  
   - name:                              extra_params
     displayName:                       Extra Parameters
     type:                              string
@@ -163,7 +167,7 @@ extends:
         parameters:
           sap_system_configuration_name:   ${{ parameters.sap_system_configuration_name }}
           environment:                     ${{ parameters.environment }}
-          bom_base_name:                   ${{ parameters.bom_base_name }}
+          bom_base_name:                   ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), parameters.bom_base_name )],' ','') }}
           base_os_configuration:           ${{ parameters.base_os_configuration }}
           sap_os_configuration:            ${{ parameters.sap_os_configuration }}
           bom_processing:                  ${{ parameters.bom_processing }}
