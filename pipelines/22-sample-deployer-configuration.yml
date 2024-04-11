@@ -58,6 +58,13 @@ parameters:
       - WEIN
       - WEUS
       - WUS2
+
+  - name:                              workload_environment_parameter
+    displayName:                       First Workload Environment name (MGMT, DEV, QA, PRD, ...)
+    type:                              string
+    default:                           DEV
+      
+
   - name:                              firewall
     displayName:                       Deploy Azure Firewall
     type:                              boolean
@@ -76,11 +83,14 @@ parameters:
   - name:                              spn
     displayName:                       Use a Service Principal for deployments, unchecking will use a managed identity
     type:                              boolean
-    default:                           true
+    default:                           false
 
 variables:
   - name:                              deployer_environment
     value:                             ${{ parameters.deployer_environment_parameter }}
+
+  - name:                              workload_environment
+    value:                             ${{ parameters.workload_environment_parameter }}
 
   - name:                              deployer_region
     value:                             ${{ parameters.deployer_region_parameter }}
@@ -297,7 +307,7 @@ stages:
                             Add-Content $(library_file) "environment = ""$(deployer_environment)"""
                             Add-Content $(library_file) "location = ""$region"""
                             Add-Content $(library_file) ""
-                            Add-Content $(library_file) "dns_label = ""azure.sdaf.contoso.net"""
+                            Add-Content $(library_file) "dns_label = ""azure" + $region + ".sdaf.contoso.net"""
                             Add-Content $(library_file) "use_private_endpoint = true"
                             Add-Content $(library_file) "$(use_spn)"
                             git add -f $(library_file)
@@ -318,7 +328,7 @@ stages:
                         Add-Content $(library_file) "environment = ""$(deployer_environment)"""
                         Add-Content $(library_file) "location = ""$region"""
                         Add-Content $(library_file) ""
-                        Add-Content $(library_file) "dns_label = ""azure.sdaf.contoso.net"""
+                        Add-Content $(library_file) "dns_label = ""azure" + $region + ".sdaf.contoso.net"""
                         Add-Content $(library_file) "use_private_endpoint = true"
                         Add-Content $(library_file) "$(use_spn)"
                         git add -f $(library_file)
@@ -356,6 +366,9 @@ stages:
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
+                    
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -366,6 +379,7 @@ stages:
 
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -388,6 +402,7 @@ stages:
 
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
