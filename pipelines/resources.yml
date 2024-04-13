@@ -3,7 +3,7 @@ resources:
     - repository: sap-automation
       type: git
       name: sap deployment automation framework/sap-automation
-      ref: refs/heads/main
+      ref:  refs/heads/main
 
 parameters:
   - name: stages

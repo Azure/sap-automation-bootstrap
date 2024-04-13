@@ -119,6 +119,8 @@ variables:
   - name:                              use_spn
     value:                             ${{ format('use_spn = {0}', lower(parameters.spn)) }}
 
+  - name:                              calculated_dns
+    value:                             ${{ format('azure.{0}.sdaf.contoso.net', lower(parameters.deployer_region_parameter)) }}
 
 trigger:                               none
 
@@ -307,9 +309,10 @@ stages:
                             Add-Content $(library_file) "environment = ""$(deployer_environment)"""
                             Add-Content $(library_file) "location = ""$region"""
                             Add-Content $(library_file) ""
-                            Add-Content $(library_file) "dns_label = ""azure" + $region + ".sdaf.contoso.net"""
+                            Add-Content $(library_file) 
                             Add-Content $(library_file) "use_private_endpoint = true"
                             Add-Content $(library_file) "$(use_spn)"
+                            Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
                             git add -f $(library_file)
                             git commit -m "Added Control Plane Library configuration[skip ci]"
 
@@ -328,9 +331,9 @@ stages:
                         Add-Content $(library_file) "environment = ""$(deployer_environment)"""
                         Add-Content $(library_file) "location = ""$region"""
                         Add-Content $(library_file) ""
-                        Add-Content $(library_file) "dns_label = ""azure" + $region + ".sdaf.contoso.net"""
                         Add-Content $(library_file) "use_private_endpoint = true"
                         Add-Content $(library_file) "$(use_spn)"
+                        Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
                         git add -f $(library_file)
                         git commit -m "Added Control Plane Library configuration[skip ci]"
 
