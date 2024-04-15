@@ -83,7 +83,7 @@ extends:
     stages:
       - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
         parameters:
-          bom_base_name:               ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), parameters.bom_base_name )],' ','') }}
+          bom_base_name:               ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), parameters.bom_base_name ),' ','') }}
           environment:                 ${{ parameters.environment }}
           region:                      ${{ parameters.region }}
           re_download:                 ${{ parameters.re_download }}
