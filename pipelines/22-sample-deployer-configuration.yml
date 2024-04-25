@@ -80,10 +80,15 @@ parameters:
     type:                              number
     default:                           1
 
-  - name:                              spn
-    displayName:                       Use a Service Principal for deployments, unchecking will use a managed identity
+  - name:                              identity
+    displayName:                       Use a Managed Identity for deployments, unchecking will use a service principal (legacy)
     type:                              boolean
     default:                           false
+
+  - name:                              msi_identity
+    displayName:                       Provide the Azure resource identifier for the Managed Identity MSI to use (optional)
+    type:                              string
+    default:                           ' '
 
 variables:
   - name:                              deployer_environment
@@ -117,10 +122,13 @@ variables:
     value:                             ${{ format('deployer_count = {0}', parameters.deployer_count) }}
 
   - name:                              use_spn
-    value:                             ${{ format('use_spn = {0}', lower(parameters.spn)) }}
+    value:                             ${{ format('use_spn = {0}', lower(parameters.identity)) }}
 
   - name:                              calculated_dns
     value:                             ${{ format('azure.{0}.sdaf.contoso.net', lower(parameters.deployer_region_parameter)) }}
+
+  - name:                              msi_identity_id
+    value:                             ${{ parameters.msi_identity }}
 
 trigger:                               none
 
@@ -199,6 +207,8 @@ stages:
                         "WUS2" { "westus2" }
                     }
 
+                    $msi_id="$(msi_identity_id)".Trim()
+
                     $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
                     $Full_FileName = (Join-Path -path $Full -ChildPath "$(deployer_file)")
 
@@ -235,7 +245,15 @@ stages:
 
                             Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
                             Add-Content $(deployer_file) "$(use_spn)"
-
+                            if($msi_id.Length -gt 0)
+                            {
+                                Add-Content $(deployer_file) "user_assigned_identity_id=""$msi_id"""
+                            }
+                            else
+                            {
+                                Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
+                            }
+    
                             git add -f $(deployer_file)
                             git commit -m "Added Control Plane configuration[skip ci]"
 
@@ -275,7 +293,14 @@ stages:
                         Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
                         Add-Content $(deployer_file) ""
                         Add-Content $(deployer_file) "$(use_spn)"
-                        Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
+                        if($msi_id.Length -gt 0)
+                        {
+                            Add-Content $(deployer_file) "user_assigned_identity_id=""$msi_id"""
+                        }
+                        else
+                        {
+                            Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
+                        }
 
                         Add-Content $(deployer_file) ""
  

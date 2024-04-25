@@ -49,10 +49,9 @@ parameters:
       - ERP6_EHP8_LNX_DB2UDB_11_5_v0001ms
       - HCMT_v0002ms
       - BW4HANA2021SPS01_v0003ms
-      - HANA_2_00_055_v0006ms
-      - HANA_2_00_059_v0004ms
-      - HANA_2_00_066_v0001ms
-      - HANA_2_00_067_v0004ms
+      - HANA_2_00_059_v0010ms
+      - HANA_2_00_067_v0006ms
+      - HANA_2_00_076_v0001ms
       - HANA_2_00_071_v0001ms
 
   - name:                              bom_override_name
