@@ -11,10 +11,13 @@ parameters:
     type:                              string
     values:
       - S42023SPS00_v0001ms
-      - S42022SPS00_v0001ms
+      - S42023SPS00_v0002ms (dynamic)
+      - S42022SPS00_v0003ms
+      - S42022SPS00_v0004ms (dynamic)
       - S42021ISS00_v0001ms
       - S42020ISS00_v0003ms
       - S41909ISS00_v0011ms      
+      - S41909ISS00_v0012ms (dynamic)      
       - NW750SPS25_v0001ms
       - NW750_HANA_v0004ms
       - NW752SPS09_v0001ms
@@ -82,7 +85,7 @@ extends:
     stages:
       - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
         parameters:
-          bom_base_name:               ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), parameters.bom_base_name ),' ','') }}
+          bom_base_name:               ${{ replace(coalesce(replace(parameters.bom_override_name,' ',''), split(parameters.bom_base_name,' ')[0] ),' ','') }}
           environment:                 ${{ parameters.environment }}
           region:                      ${{ parameters.region }}
           re_download:                 ${{ parameters.re_download }}
