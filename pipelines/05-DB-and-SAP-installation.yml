@@ -24,38 +24,38 @@ parameters:
     displayName:                       Bill of Materials name
     type:                              string
     values:
-      - S42023SPS00_v0001ms
-      - S42023SPS00_v0002ms (dynamic)
-      - S42022SPS00_v0003ms
+      - S42023SPS00_v0004ms
       - S42022SPS00_v0004ms (dynamic)
-      - S42021ISS00_v0001ms
-      - S42020ISS00_v0003ms
-      - S41909ISS00_v0011ms      
-      - S41909ISS00_v0012ms (dynamic)      
-      - NW750SPS25_v0001ms
-      - NW750_HANA_v0004ms
-      - NW752SPS09_v0001ms
-      - NW750SPS20_DB2_v0001ms
+      - S42022SPS00_v0005ms (HANA_2_00_076)
+      - S42022SPS00_v0006ms (HANA_2_00_077)
+      - S42021ISS00_v0003ms
+      - S42020ISS00_v0004ms
+      - S41909SPS03_v0012ms (dynamic)
+      - S41909ISS00_v0013ms
+      - NW750SPS25_v0002ms
+      - NW750_HANA_v0005ms
+      - NW752SPS09_v0002ms
+      - NW750SPS20_DB2_v0002ms
       - NW750_ORACLE_19_v0001ms
       - NW750SPS25_JAVA_v0001ms
-      - NW750SPS20_SYBASE_v0001ms
+      - NW750SPS20_SYBASE_v0002ms
       - NW750_ORACLE_19_ASM_v0001ms
-      - NW750_MSSQL_v0001ms
-      - NW752_MSSQL_v0001ms
-      - NW_MSSQL_v0001ms
+      - NW750_MSSQL_v0002ms
+      - NW752_MSSQL_v0002ms
+      - NW_MSSQL_v0002ms
       - ORACLE_19_00_v0003ms
-      - ORACLE_19_00_ASM_v0001ms      
+      - ORACLE_19_00_ASM_v0001ms
       - DB2_UDB_11_5_v0001ms
       - ORACLE_19_00_ORA_MSID_v0002ms
       - ERP6_EHP8_WIN_MSS2019_v0001ms
       - ERP6_EHP8_WIN_MSS2016_v0001ms
       - ERP6_EHP8_LNX_DB2UDB_11_5_v0001ms
       - HCMT_v0002ms
-      - BW4HANA2021SPS01_v0003ms
-      - HANA_2_00_059_v0010ms
+      - BW4HANA2021SPS01_v0004ms
+      - HANA_2_00_059_v0011ms
       - HANA_2_00_067_v0006ms
       - HANA_2_00_076_v0001ms
-      - HANA_2_00_071_v0001ms
+      - HANA_2_00_077_v0002ms
 
   - name:                              bom_override_name
     displayName:                       Custom Name of Bill of Materials (BoM)
