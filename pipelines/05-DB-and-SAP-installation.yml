@@ -117,6 +117,11 @@ parameters:
     type:                              boolean
     default:                           false
 
+  - name:                              sap_on_azure_quality_checks
+    displayName:                       SAP on Azure Quality Checks
+    type:                              boolean
+    default:                           false
+
   - name:                              post_configuration_actions
     displayName:                       Post Configuration Actions
     type:                              boolean
@@ -181,6 +186,7 @@ extends:
           pas_installation:                ${{ parameters.pas_installation }}
           application_server_installation: ${{ parameters.application_server_installation }}
           webdispatcher_installation:      ${{ parameters.webdispatcher_installation }}
+          sap_on_azure_quality_checks:     ${{ parameters.sap_on_azure_quality_checks }}
           post_configuration_actions:      ${{ parameters.post_configuration_actions }}
           acss_registration:               ${{ parameters.acss_registration }}
           acss_environment:                ${{ parameters.acss_environment }}
