@@ -10,10 +10,10 @@ parameters:
     displayName:                       Name of Bill of Materials (BoM)
     type:                              string
     values:
-      - S42023SPS00_v0001ms
-      - S42023SPS00_v0002ms (dynamic)
-      - S42022SPS00_v0003ms
-      - S42022SPS00_v0004ms (dynamic)
+      - S42023SPS00_v0003ms
+      - S42023SPS00_v0004ms (dynamic)
+      - S42022SPS00_v0005ms
+      - S42022SPS00_v0006ms (dynamic)
       - S42021ISS00_v0001ms
       - S42020ISS00_v0003ms
       - S41909ISS00_v0011ms      
