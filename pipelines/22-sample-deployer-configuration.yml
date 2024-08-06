@@ -81,7 +81,7 @@ parameters:
     default:                           1
 
   - name:                              identity
-    displayName:                       Use a Managed Identity for deployments, unchecking will use a service principal (legacy)
+    displayName:                       Use a Service Principal for deployments (legacy), unchecking will use a Managed Identity.
     type:                              boolean
     default:                           false
 
