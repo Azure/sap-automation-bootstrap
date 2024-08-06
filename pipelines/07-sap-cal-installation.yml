@@ -20,8 +20,8 @@ parameters:
     type:                              string
     default:                           DEV
 
-  - name:                              sap_cal_product_id
-    displayName:                       SAP CAL Product ID
+  - name:                              sap_cal_product_name
+    displayName:                       SAP CAL Product Name
     type:                              string
     values:
       - S/4HANA_2023-Initial_Shipment_Stack
@@ -102,7 +102,7 @@ extends:
           acss_registration:               ${{ parameters.acss_registration }}
           acss_environment:                ${{ parameters.acss_environment }}
           acss_sap_product:                ${{ parameters.acss_sap_product }}
-          sap_cal_product_id:              ${{ parameters.sap_cal_product_id }}
+          sap_cal_product_name:            ${{ parameters.sap_cal_product_name }}
           sapcal_integration:              ${{ parameters.sapcal_integration }}
           sap_automation_repo_path:        $(Build.SourcesDirectory)/sap-automation
           config_repo_path:                $(Build.SourcesDirectory)/config
