@@ -39,7 +39,7 @@ parameters:
     
       - NW750SPS20_SYBASE_v0002ms (ASE_16_0_3)
     
-      - NW750_MSSQL_v0002ms (MSSQL_2019)
+      - NW750_MSSQL_v0003ms (MSSQL_2019)
       
       - HANA_2_00_059_v0011ms
       - HANA_2_00_067_v0006ms
