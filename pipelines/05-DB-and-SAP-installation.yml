@@ -46,8 +46,9 @@ parameters:
       - NW750SPS25_JAVA__HANA_v0001ms (HANA_2_00_067)
     
       - NW750SPS20_DB2_v0002ms (DB2_UDB_11_5)
-    
-      - NW750_ORACLE_19_v0002ms (Oracle_19)
+      
+      - NW750_ORACLE_19_v0001ms (Oracle_19)
+      - NW750_ORACLE_19_v0002ms (Oracle_19 - Kernel 754)
       - NW750_ORACLE_19_ASM_v0001ms (Oracle_19)
       - NW750SPS25_JAVA_Oracle_19_00_v0001ms (Oracle_19)
     
