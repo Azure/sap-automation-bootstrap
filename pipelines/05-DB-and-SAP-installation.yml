@@ -24,6 +24,8 @@ parameters:
     displayName:                       Bill of Materials name
     type:                              string
     values:
+      - S42023SPS00_v0005ms (HANA_2_00_081)
+
       - S42023SPS00_v0003ms (HANA_2_00_077)
       - S42023SPS00_v0004ms (HANA_2_00_077 - dynamic)
       
@@ -46,7 +48,7 @@ parameters:
       - NW750SPS25_JAVA__HANA_v0001ms (HANA_2_00_067)
     
       - NW750SPS20_DB2_v0002ms (DB2_UDB_11_5)
-      
+    
       - NW750_ORACLE_19_v0001ms (Oracle_19)
       - NW750_ORACLE_19_v0002ms (Oracle_19 - Kernel 754)
       - NW750_ORACLE_19_ASM_v0001ms (Oracle_19)
@@ -55,11 +57,14 @@ parameters:
       - NW750SPS20_SYBASE_v0003ms (ASE_16_0_3)
     
       - NW750_MSSQL_v0003ms (MSSQL_2019)
+
+      - SOLMAN_72SR2_JAVA_v0001ms (HANA_2_00_081)
       
       - HANA_2_00_059_v0011ms
       - HANA_2_00_067_v0006ms
       - HANA_2_00_076_v0001ms
       - HANA_2_00_077_v0002ms
+      - HANA_2_00_081_v0001ms
 
       - DB2_UDB_11_5_v0001ms
       
