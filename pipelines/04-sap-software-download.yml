@@ -57,10 +57,12 @@ parameters:
       - ORACLE_19_00_v0003ms
       - ORACLE_19_00_ASM_v0001ms
       - ORACLE_19_00_ORA_MSID_v0002ms
-
+      
       - MSSQLSRV_2019_v0001ms
       
       - SYBASE_1603SP15_v0003ms
+
+      - XBOM_Tester
 
 
   - name:                              bom_override_name
