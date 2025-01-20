@@ -59,7 +59,7 @@ parameters:
       - NW750_MSSQL_v0003ms (MSSQL_2019)
 
       - SOLMAN_72SR2_JAVA_v0001ms (HANA_2_00_081)
-      - SOLMAN72FPS12_v0001ms (HANA_2_00_081)
+      - SOLMAN_72SR2_v0001ms (HANA_2_00_081)
     
       - HANA_2_00_059_v0011ms
       - HANA_2_00_067_v0006ms
