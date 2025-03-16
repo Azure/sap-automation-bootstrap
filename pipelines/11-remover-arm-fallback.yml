@@ -16,50 +16,40 @@ parameters:
     default:                           true
 
   - name:                              sap_system
-    displayName:                       "SAP System configuration name, use this format: ENV-LOCA-VNET-SID"
+    displayName:                       "SAP System SID, use this format: ENV-LOCA-VNET-SID"
     type:                              string
-    default:                           DEV-WEEU-SAP01-X00
+    default:                           X00
 
   - name:                              cleanup_workload_zone
     displayName:                       Remove the SAP workload zone
     type:                              boolean
     default:                           true
 
-  - name:                              workload_zone
-    displayName:                       "SAP workload zone configuration name, use this format: ENV-LOCA-VNET-INFRASTRUCTURE"
+  - name:                              workload_zone_name
+    displayName:                       "SAP workload zone configuration name, use this format: ENV-LOCA-VNET"
     type:                              string
-    default:                           DEV-WEEU-SAP01-INFRASTRUCTURE
+    default:                           TEST-NOEU-SAP01
 
   - name:                              cleanup_control_plane
     displayName:                       Remove the control plane
     type:                              boolean
     default:                           true
 
-  - name:                              deployer
-    displayName:                       "Deployer configuration name, use this format: ENV-LOCA-VNET-INFRASTRUCTURE"
+  - name:                              control_plane_name
+    displayName:                       "Deployer configuration name, use this format: ENV-LOCA-VNET"
     type:                              string
-    default:                           MGMT-WEEU-DEP01-INFRASTRUCTURE
+    default:                           CTRL-NOEU-MGT01
 
-  - name:                              library
-    displayName:                       "Library configuration name, use this format: ENV-LOCA-SAP_LIBRARY"
-    type:                              string
-    default:                           MGMT-WEEU-SAP_LIBRARY
 
-  - name:                              workload_environment_parameter
-    displayName:                       Workload Environment (DEV, QUA, PRD, ...)
-    type:                              string
-    default:                           DEV
-
-  - name:                              deployer_environment_parameter
-    displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           MGMT
 
 trigger:                               none
 
 pool:
   vmImage:                             ubuntu-latest
 
+
+variables:
+  - group:                             SDAF-${{ parameters.workload_zone_name }}
 extends:
   template:                            ./resources.yml
   parameters:
@@ -71,9 +61,7 @@ extends:
           cleanup_sap:                 ${{ parameters.cleanup_sap }}
           sap_system:                  ${{ parameters.sap_system }}
           cleanup_workload_zone:       ${{ parameters.cleanup_workload_zone }}
-          workload_zone:               ${{ parameters.workload_zone }}
+          workload_zone_name:          ${{ parameters.workload_zone_name }}
           cleanup_control_plane:       ${{ parameters.cleanup_control_plane }}
-          deployer:                    ${{ parameters.deployer }}
-          library:                     ${{ parameters.library }}
-          workload_environment:        ${{ parameters.workload_environment_parameter }}
-          deployer_environment:        ${{ parameters.deployer_environment_parameter }}
+          control_plane_name:          ${{ parameters.control_plane_name }}
+          workload_zone_connection:    $(AZURE_CONNECTION_NAME)

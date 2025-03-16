@@ -7,78 +7,25 @@
 name:                                  Deploying the SAP Workload zone defined in $(workload_zone_folder)
 
 parameters:
-  - name:                              workload_zone
-    displayName:                       "Workload zone configuration name, use the following syntax: ENV-LOCA-VNET-INFRASTRUCTURE"
+  - name:                              workload_zone_name
+    displayName:                       "Workload zone name, use the following syntax: ENV-LOCA-VNET"
     type:                              string
-    default:                           DEV-WEEU-SAP01-INFRASTRUCTURE
+    default:                           TEST-NOEU-SAP01
 
-  - name:                              workload_environment_parameter
-    displayName:                       Workload Environment (DEV, QUA, PRD, ...)
+  - name:                              control_plane_name
+    displayName:                       "Control plane name, use the following syntax: ENV-LOCA-VNET"
     type:                              string
-    default:                           DEV
-
-  - name:                              deployer_environment_parameter
-    displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           MGMT
-
-  - name:                              deployer_region_parameter
-    displayName:                       Deployer region name code (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           WEEU
-    values:
-      - AUCE
-      - AUC2
-      - AUEA
-      - AUSE
-      - BRSO
-      - BRSE
-      - BRUS
-      - CACE
-      - CAEA
-      - CEIN
-      - CEUS
-      - CEUA
-      - EAAS
-      - EAUS
-      - EUS2
-      - FRCE
-      - FRSO
-      - GENO
-      - GEWC
-      - JAEA
-      - JAWE
-      - JINC
-      - JINW
-      - KOCE
-      - KOSO
-      - NCUS
-      - NOEU
-      - NOEA
-      - NOWE
-      - SANO
-      - SAWE
-      - SCUS
-      - SCUG
-      - SOEA
-      - SOIN
-      - SECE
-      - SWNO
-      - SWWE
-      - UACE
-      - UANO
-      - UKSO
-      - UKWE
-      - WCUS
-      - WEEU
-      - WEIN
-      - WEUS
-      - WUS2
+    default:                           CTRL-NOEU-MGT01
 
   - name:                              inherit_settings
     displayName:                       Inherit Terraform state file information from control plane
     type:                              boolean
     default:                           true
+
+  - name:                              test
+    displayName:                       Test only
+    type:                              boolean
+    default:                           false
 
 #--------------------------------------+---------------------------------------8
 #                                                                              |
@@ -98,10 +45,10 @@ extends:
     stages:
       - template:                      deploy\pipelines\02-sap-workload-zone.yaml@sap-automation
         parameters:
-          workload_zone:               ${{ parameters.workload_zone }}
-          workload_environment:        ${{ parameters.workload_environment_parameter }}
-          deployer_environment:        ${{ parameters.deployer_environment_parameter }}
-          deployer_region:             ${{ parameters.deployer_region_parameter }}
+          workload_zone_name:          ${{ parameters.workload_zone_name }}
+          control_plane_name:          ${{ parameters.control_plane_name }}
           inherit_settings:            ${{ parameters.inherit_settings }}
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
+          test:                        ${{ parameters.test }}
+          

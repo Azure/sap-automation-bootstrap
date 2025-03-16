@@ -8,20 +8,10 @@
 name:                                  Remove Control Plane
 
 parameters:
-  - name:                              deployer
-    displayName:                       "Deployer configuration name, use this format: ENV-LOCA-VNET-INFRASTRUCTURE"
+  - name:                              control_plane_name
+    displayName:                       "Control Plane Name name, use this format: ENV-LOCA-VNET"
     type:                              string
-    default:                           MGMT-WEEU-DEP01-INFRASTRUCTURE
-
-  - name:                              library
-    displayName:                       "Library configuration name, use this format: ENV-LOCA-SAP_LIBRARY"
-    type:                              string
-    default:                           MGMT-WEEU-SAP_LIBRARY
-
-  - name:                              deployer_environment
-    displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           MGMT
+    default:                           CTRL-NOEU-MGT01
 
   - name:                              use_deployer
     displayName:                       Run removal on self hosted agent
@@ -29,6 +19,11 @@ parameters:
     default:                           false
 
 trigger:                               none
+
+
+variables:
+
+  - group:                               SDAF-${{ parameters.control_plane_name }}
 
 pool:
   name:                                $[coalesce(variables['run_on'], variables['Agent'])]
@@ -41,7 +36,6 @@ extends:
         parameters:
           sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
           config_repo_path:            $(Build.SourcesDirectory)/config
-          deployer:                    ${{ parameters.deployer }}
-          library:                     ${{ parameters.library }}
-          deployer_environment:        ${{ parameters.deployer_environment }}
+          control_plane_name:          ${{ parameters.control_plane_name }}
           use_deployer:                ${{ parameters.use_deployer }}
+          connection_name:             $(AZURE_CONNECTION_NAME)

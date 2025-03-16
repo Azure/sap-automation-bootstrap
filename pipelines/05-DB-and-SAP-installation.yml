@@ -1,181 +1,535 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 ---
-# /*---------------------------------------------------------------------------8
-# |                                                                            |
-# |               This pipeline performs the software installation             |
-# |              and must run on a self hosted deployment agent                |
-# |                      due to long run time                                  |
-# |                                                                            |
-# +------------------------------------4--------------------------------------*/
-
-name:                                  OS Configuration and SAP Installation $(sap_system_folder) $(bom)
-
-parameters:
-  - name:                              sap_system_configuration_name
-    displayName:                       "SAP System configuration name, use the following syntax: ENV-LOCA-VNET-SID"
-    type:                              string
-    default:                           DEV-WEEU-SAP01-X00
-
-  - name:                              environment
-    displayName:                       Workload Environment (DEV, QUA, PRD, ...)
-    type:                              string
-    default:                           DEV
-
-  - name:                              bom_base_name
-    displayName:                       Bill of Materials name
-    type:                              string
-    values:
-      - S4HANA_2021_ISS_v0001ms
-      - S42020SPS04_v0001ms
-      - S41909SPS03_v0011ms
-      - HANA_2_00_063_v0001ms
-      - HANA_2_00_061_v0001ms
-      - HANA_2_00_059_v0003ms
-      - HANA_2_00_055_v0006ms
-      - NW750SPS20_v0004ms
-      - NW752SPS09_v0001ms
-      - ORACLE_19_00_v0002ms
-      - ORACLE_19_00_v0003ms
-      - ORACLE_19_00_ASM_v0001ms      
-      - NW750SPS20_DB2_v0001ms
-      - ORACLE_19_00_ORA_MSID_v0002ms
-      - ERP6_EHP8_WIN_MSS2019_v0001ms
-      - NW_MSSQL_v0001ms
-
-  - name:                              extra_params
-    displayName:                       Extra Parameters
-    type:                              string
-    default:                           " "
-
-  - name:                              base_os_configuration
-    displayName:                       Core Operating System Configuration
-    type:                              boolean
-    default:                           true
-
-  - name:                              sap_os_configuration
-    displayName:                       SAP Operating System Configuration
-    type:                              boolean
-    default:                           true
-
-  - name:                              bom_processing
-    displayName:                       Local software download
-    type:                              boolean
-    default:                           true
-
-  - name:                              scs_installation
-    displayName:                       SCS Installation
-    type:                              boolean
-    default:                           true
-
-  - name:                              database_install
-    displayName:                       Database Installation
-    type:                              boolean
-    default:                           true
-
-  - name:                              db_load
-    displayName:                       Database Load
-    type:                              boolean
-    default:                           true
-
-  - name:                              high_availability_configuration
-    displayName:                       SAP & DB High Availability Setup
-    type:                              boolean
-    default:                           true
-
-  - name:                              pas_installation
-    displayName:                       PAS Installation
-    type:                              boolean
-    default:                           true
-
-  - name:                              application_server_installation
-    displayName:                       APP Installation
-    type:                              boolean
-    default:                           true
-
-  - name:                              webdispatcher_installation
-    displayName:                       WebDispatcher Installation
-    type:                              boolean
-    default:                           false
-
-# 20220929 MKD - ACSS Registration <BEGIN>
-  - name:                              acss_registration
-    displayName:                       Register System in ACSS
-    type:                              boolean
-    default:                           true
-
-  - name:                              acss_environment
-    displayName:                       ACSS Prod/NonProd
-    type:                              string
-    values:
-      - NonProd
-      - Prod
-
-  - name:                              acss_sap_product
-    displayName:                       System Type
-    type:                              string
-    values:
-      - S4HANA
-      - ECC
-      - Other
-# 20220929 MKD - ACSS Registration <END>
-
-  - name:                              sapadm_uid
-    displayName:                       SAP sidadm ID (UID)
-    type:                              string
-    default:                           "2100"
-
-  - name:                              sapinst_gid
-    displayName:                       sapinst group ID (GID)
-    type:                              string
-    default:                           "2001"
-
-  - name:                              ora_release
-    displayName:                       Oracle Release
-    type:                              string
-    default:                           "19"
-
-  - name:                              ora_version
-    displayName:                       Oracle Version
-    type:                              string
-    default:                           "19.0.0"
-
-  - name:                              oracle_sbp_patch
-    displayName:                       Oracle SBP Patch file name
-    type:                              string
-    default:                           ""
-
-#--------------------------------------+---------------------------------------8
-#                                                                              |
-# Calls 05-DB-and-SAP-installation.yaml from the code repository               |
-# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
-#                                                                              |
-#--------------------------------------+---------------------------------------8
-trigger:                               none
-
-pool:
-  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
-
-extends:
-  template:                            ./resources.yml
+  # /*---------------------------------------------------------------------------8
+  # |                                                                            |
+  # |               This pipeline performs the software installation             |
+  # |              and must run on a self hosted deployment agent                |
+  # |                      due to long run time.                                 |
+  # |                                                                            |
+  # +------------------------------------4--------------------------------------*/
+  
   parameters:
-    stages:
-      - template:                      deploy\pipelines\05-DB-and-SAP-installation.yaml@sap-automation
-        parameters:
-          sap_system_configuration_name:   ${{ parameters.sap_system_configuration_name }}
-          environment:                     ${{ parameters.environment }}
-          bom_base_name:                   ${{ parameters.bom_base_name }}
-          base_os_configuration:           ${{ parameters.base_os_configuration }}
-          sap_os_configuration:            ${{ parameters.sap_os_configuration }}
-          bom_processing:                  ${{ parameters.bom_processing }}
-          database_install:                ${{ parameters.database_install }}
-          scs_installation:                ${{ parameters.scs_installation }}
-          db_load:                         ${{ parameters.db_load }}
-          high_availability_configuration: ${{ parameters.high_availability_configuration }}
-          pas_installation:                ${{ parameters.pas_installation }}
-          application_server_installation: ${{ parameters.application_server_installation }}
-          webdispatcher_installation:      ${{ parameters.webdispatcher_installation }}
-          acss_registration:               ${{ parameters.acss_registration }}
-          acss_environment:                ${{ parameters.acss_environment }}
-          acss_sap_product:                ${{ parameters.acss_sap_product }}
-          sap_automation_repo_path:        $(Build.SourcesDirectory)/sap-automation
-          config_repo_path:                $(Build.SourcesDirectory)/config
-          extra_params:                    ${{ parameters.extra_params }}
+    - name:                              sap_system_configuration_name
+      displayName:                       "SAP System configuration name, use the following syntax: ENV-LOCA-VNET-SID"
+      type:                              string
+  
+    - name:                              workload_zone_name
+      displayName:                       Workload Environment (DEV, QUA, PRD, ...)
+      type:                              string
+  
+    - name:                              bom_base_name
+      displayName:                       Bill of Materials name
+      type:                              string
+  
+    - name:                              extra_params
+      displayName:                       Extra Parameters
+      type:                              string
+      default:                           ""
+  
+    - name:                              base_os_configuration
+      displayName:                       Core Operating System Configuration
+      type:                              boolean
+      default:                           true
+  
+    - name:                              sap_os_configuration
+      displayName:                       SAP Operating System Configuration
+      type:                              boolean
+      default:                           true
+  
+    - name:                              bom_processing
+      displayName:                       Software Acquisition
+      type:                              boolean
+      default:                           true
+  
+    - name:                              database_install
+      displayName:                       Database Installation
+      type:                              boolean
+      default:                           true
+  
+    - name:                              scs_installation
+      displayName:                       SCS Installation
+      type:                              boolean
+      default:                           true
+  
+    - name:                              db_load
+      displayName:                       Database Load
+      type:                              boolean
+      default:                           true
+  
+    - name:                              high_availability_configuration
+      displayName:                       SAP & DB High Availability Setup
+      type:                              boolean
+      default:                           true
+  
+    - name:                              pas_installation
+      displayName:                       Primary Application Server Installation
+      type:                              boolean
+      default:                           true
+  
+    - name:                              application_server_installation
+      displayName:                       Additional Application Server Installation
+      type:                              boolean
+      default:                           true
+  
+    - name:                              webdispatcher_installation
+      displayName:                       Web Dispatcher Installation
+      type:                              boolean
+      default:                           false
+  
+    - name:                              post_configuration_actions
+      displayName:                       Post Configuration Actions
+      type:                              boolean
+      default:                           false
+  
+    - name:                              sap_on_azure_quality_checks
+      displayName:                       SAP on Azure Quality Checks
+      type:                              boolean
+      default:                           false
+  
+    - name:                              ams_provider
+      displayName:                       Configure AMS Provider
+      type:                              boolean
+      default:                           false
+  
+  
+  # 20220929 MKD - ACSS Registration <BEGIN>
+    - name:                              acss_registration
+      displayName:                       Register System in ACSS
+      type:                              boolean
+      default:                           true
+  
+    - name:                              acss_environment
+      displayName:                       ACSS Prod/NonProd
+      type:                              string
+      values:
+        - NonProd
+        - Prod
+  
+    - name:                              acss_sap_product
+      displayName:                       System Type
+      type:                              string
+      values:
+        - S4HANA
+        - ECC
+        - Other
+    # 20220929 MKD - ACSS Registration <END>
+  
+    - name:                              sap_automation_repo_path
+      displayName:                       The local path on the agent where the sap_automation repo can be found
+      type:                              string
+  
+    - name:                              config_repo_path
+      displayName:                       The local path on the agent where the config repo can be found
+      type:                              string
+  
+  stages:
+    - stage:                             Preparation_for_Ansible
+      condition:                         and(not(failed()), not(canceled()))
+      variables:
+        - template:                      variables/05-DB-and-SAP-installation-variables.yaml
+          parameters:
+            workload_zone_name:          ${{ parameters.workload_zone_name }}
+      displayName:                       OS Configuration and SAP Installation
+      jobs:
+        - job:                           Installation_step
+          displayName:                   OS Configuration and SAP Installation
+          timeoutInMinutes:              0
+          workspace:
+            clean:                       all
+          steps:
+            - template:                  templates\download.yaml
+              parameters:
+                getLatestFromBranch: true
+            - task:                      PostBuildCleanup@4
+            - task:                      Bash@3
+              name:                      ParameterValidation
+              displayName:               Parameter Pre Validation
+              inputs:
+                targetType:              'filePath'
+                filePath:                "$(System.DefaultWorkingDirectory)/sap-automation/deploy/scripts/pipeline_scripts/00-validate-credentials.sh"
+                failOnStderr:            false
+                workingDirectory:        "$(System.DefaultWorkingDirectory)"
+              env:
+                AZURE_DEVOPS_EXT_PAT:    $(System.AccessToken)
+                SYSTEM_COLLECTIONURI:    $(System.CollectionUri)
+                SYSTEM_TEAMPROJECT:      $(System.TeamProject)
+            - task:                      Bash@3
+              inputs:
+                targetType:              'filePath'
+                filePath:                "$(System.DefaultWorkingDirectory)/sap-automation/deploy/scripts/pipeline_scripts/05-DB-and-SAP-installation-prepare.sh"
+                failOnStderr:            false
+                workingDirectory:        "$(System.DefaultWorkingDirectory)"
+              name:                      Preparation
+              displayName:               Preparation for Ansible
+              env:
+                ANSIBLE_COLLECTIONS_PATH:      /opt/ansible/collections
+                ANSIBLE_HOST_KEY_CHECKING:     false
+                APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                AZURE_CLIENT_ID:               $(ParameterValidation.ARM_CLIENT_ID)
+                AZURE_CLIENT_SECRET:           $(ParameterValidation.ARM_CLIENT_SECRET)
+                AZURE_DEVOPS_EXT_PAT:          $(System.AccessToken)
+                AZURE_OBJECT_ID:               $(ParameterValidation.ARM_OBJECT_ID)
+                AZURE_SUBSCRIPTION_ID:         $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                AZURE_TENANT_ID:               $(ParameterValidation.ARM_TENANT_ID)
+                BOM_BASE_NAME:                 ${{ parameters.bom_base_name }}
+                CONFIG_REPO_PATH:              ${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)
+                CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                EXTRA_PARAMETERS:              $(EXTRA_PARAMETERS)
+                PIPELINE_EXTRA_PARAMETERS:     ${{ parameters.extra_params }}
+                SAP_SYSTEM_CONFIGURATION_NAME: ${{ parameters.sap_system_configuration_name }}
+                SCRIPT_PATH:                   $${{ parameters.sap_automation_repo_path }}/deploy/pipelines/templates/*.sh
+                SYSTEM_ACCESSTOKEN:            $(System.AccessToken)
+                USE_MSI:                       $(USE_MSI)
+            - template:                        templates\run-ansible.yaml
+              parameters:
+                displayName:                   "Parameter validation"
+                name:                          SAPParameterValidation
+                APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                USE_MSI:                       $(USE_MSI)
+                ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_00_validate_parameters.yaml
+                azureClientId:                 $(ARM_CLIENT_ID)
+                azureClientSecret:             $(ARM_CLIENT_SECRET)
+                azureSubscriptionId:           $(ARM_SUBSCRIPTION_ID)
+                azureTenantId:                 $(ARM_TENANT_ID)
+                extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                parametersFolder:              $(Preparation.FOLDER)
+                passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                sidHosts:                      $(Preparation.HOSTS)
+                userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.base_os_configuration, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          OperatingSystemConfiguration
+                    displayName:                   "Operating System Configuration"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.sap_os_configuration, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          SAPSpecificOperatingSystemConfiguration
+                    displayName:                   "SAP Specific Operating System Configuration"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.bom_processing, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          SoftwareDownload
+                    displayName:                   "Software download"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.scs_installation, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          CentralServicesInstallation
+                    displayName:                   Central Services Installation
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.database_install, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          DatabaseInstallation
+                    displayName:                   "Database installation"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.db_load, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          DatabaseLoad
+                    displayName:                   Database Load
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.high_availability_configuration, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          DatabaseHighAvailabilityConfiguration
+                    displayName:                   Database High Availability configuration
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.pas_installation, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          PrimaryApplicationServerInstallation
+                    displayName:                   Primary Application Server Installation
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.application_server_installation, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          AdditionalApplicationServerInstallation
+                    displayName:                   Application Installation
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.webdispatcher_installation, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          WebDispatcherInstallation
+                    displayName:                   Web Dispatcher
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.post_configuration_actions, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          PostConfigurationActions
+                    displayName:                   Post Configuration Actions
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.sap_on_azure_quality_checks, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          SAPOnAzureQualityChecks
+                    displayName:                   SAP on Azure quality checks
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.acss_registration, true) }}:
+                - template:                    templates\acss-registration.yaml
+                  parameters:
+                    name:                          ACSSRegistration
+                    displayName:                   "ACSS Registration"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - ${{ if eq(parameters.ams_provider, true) }}:
+                - template:                    templates\run-ansible.yaml
+                  parameters:
+                    name:                          AMSProviderCreation
+                    displayName:                   "AMS Provider Creation"
+                    APPLICATION_CONFIGURATION_ID:  $(APPLICATION_CONFIGURATION_ID)
+                    CONTROL_PLANE_NAME:            $(CONTROL_PLANE_NAME)
+                    CONTROL_PLANE_SUBSCRIPTION_ID: $(Preparation.CP_SUBSCRIPTION)
+                    USE_MSI:                       $(USE_MSI)
+                    ansibleConfigPath:             ${{ parameters.sap_automation_repo_path }}/deploy/ansible/ansible.cfg
+                    ansibleFilePath:               ${{ parameters.sap_automation_repo_path }}/deploy/ansible/playbook_01_os_base_config.yaml
+                    azureClientId:                 $(ParameterValidation.ARM_CLIENT_ID)
+                    azureClientSecret:             $(ParameterValidation.ARM_CLIENT_SECRET)
+                    azureSubscriptionId:           $(ParameterValidation.ARM_SUBSCRIPTION_ID)
+                    azureTenantId:                 $(ParameterValidation.ARM_TENANT_ID)
+                    extraParams:                   "$(Preparation.NEW_PARAMETERS)"
+                    parametersFolder:              $(Preparation.FOLDER)
+                    passwordSecretName:            "$(Preparation.PASSWORD_KEY_NAME)"
+                    sapParams:                     "${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/artifacts/$(Preparation.SAP_PARAMETERS)"
+                    secretName:                    "$(Preparation.SSH_KEY_NAME)"
+                    sidHosts:                      $(Preparation.HOSTS)
+                    userNameSecretName:            "$(Preparation.USERNAME_KEY_NAME)"
+                    vaultName:                     $(Preparation.VAULT_NAME)
+            - template:                        templates\collect-log-files.yaml
+              parameters:
+                logPath:                       ${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/logs
+                qualityAssuranceResultsPath:   ${{ parameters.config_repo_path }}/$(Deployment_Configuration_Path)/SYSTEM/${{ parameters.sap_system_configuration_name }}/quality_assurance
+                collectQualityChecks:          ${{ parameters.sap_on_azure_quality_checks }}
+  
