@@ -202,10 +202,10 @@ web_subnet_address_prefix = "10.161.128.0/19"
 #########################################################################################
 
 # custom dns resource group name
-management_dns_resourcegroup_name = "CTL-SECE-SAP_LIBRARY"
+#management_dns_resourcegroup_name = ""
 
 # custom dns subscription
-management_dns_subscription_id = "dcb2713e-5dc8-4139-a9af-9768287bbb8d"
+#management_dns_subscription_id = ""
 
 # Defines if a custom dns solution is used
 use_custom_dns_a_registration = false
@@ -222,7 +222,7 @@ register_virtual_network_to_dns = true
 
 # The user keyvault is designed to host secrets for the administrative users
 # user_keyvault_id is an optional parameter that if provided specifies the Azure resource identifier for an existing keyvault
-user_keyvault_id = "/subscriptions/8d8422a3-a9c1-4fe9-b880-adcf61557c71/resourceGroups/TEST-SECE-SAP02-INFRASTRUCTURE/providers/Microsoft.KeyVault/vaults/testsecekv01"
+#user_keyvault_id = ""
 
 # The SPN keyvault is designed to host the SPN credentials used by the automation
 # spn_keyvault_id is an optional parameter that if provided specifies the Azure resource identifier for an existing keyvault
@@ -232,7 +232,7 @@ user_keyvault_id = "/subscriptions/8d8422a3-a9c1-4fe9-b880-adcf61557c71/resource
 enable_purge_control_for_keyvaults = true
 
 # enable_rbac_authorization_for_keyvault Controls the access policy model for the workload zone keyvault.
-enable_rbac_authorization_for_keyvault = false
+enable_rbac_authorization_for_keyvault = true
 
 #########################################################################################
 #                                                                                       #
@@ -307,7 +307,7 @@ storage_account_replication_type = "ZRS"
 #resourcegroup_name = ""
 
 # The resourcegroup_name arm_id is optional, it can be used to provide an existing resource group for the deployment
-resourcegroup_arm_id = "/subscriptions/8d8422a3-a9c1-4fe9-b880-adcf61557c71/resourceGroups/TEST-SECE-SAP02-INFRASTRUCTURE"
+#resourcegroup_arm_id = ""
 
 
 #########################################################################################
@@ -523,8 +523,7 @@ utility_vm_useDHCP = true
 # These tags will be applied to all resources
 tags = {
   "DeployedBy" = "SDAF",
-  "azsecpack" = "nonprod",
-  "platformsettings.host_environment.service.platform_optedin_for_rootcerts" = "true",
+  "Owner" = "KFO",
 }
 
 
@@ -538,5 +537,3 @@ utility_vm_image =   {
                      }
 
 prevent_deletion_if_contains_resources = false
-# The parameter 'custom_random_id' can be used to control the random 3 digits at the end of the storage accounts and key vaults
-custom_random_id="04f"

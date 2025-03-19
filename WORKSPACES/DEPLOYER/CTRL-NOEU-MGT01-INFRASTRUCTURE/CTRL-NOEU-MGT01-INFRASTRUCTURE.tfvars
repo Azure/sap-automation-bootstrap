@@ -72,7 +72,7 @@ management_subnet_address_prefix = "10.175.20.64/28"
 
 
 # use_private_endpoint is a boolean flag controlling if the keyvaults and storage accounts have private endpoints
-#use_private_endpoint=false
+use_private_endpoint = true
 
 # use_service_endpoint is a boolean flag controlling service_endpoints are used
 use_service_endpoint = true
@@ -122,7 +122,7 @@ management_bastion_subnet_address_prefix = "10.175.20.128/26"
 #########################################################################################
 
 # use_webapp is a boolean flag controlling if configuration Web App is to be deployed in the deployer VNet
-webapp_deployment = false
+webapp_deployment = true
 
 # webapp_subnet_arm_id is an optional parameter that if provided specifies Azure resource
 # identifier for the existing  subnet
@@ -170,14 +170,6 @@ deployer_image = {
   version         = "latest"
 }
 
-# Use this field if you are using a marketplace image that has a plan attached to it
-plan = {
-  "use"       = false
-  "name"      = ""
-  "publisher" = ""
-  "product"   = ""
-}
-
 # deployer_diagnostics_account_arm_id defines the diagnosting storage account for the deployer
 # deployer_diagnostics_account_arm_id = ""
 
@@ -188,7 +180,7 @@ plan = {
 use_spn = false
 
 # user_assigned_identity_id defines the user assigned identity that will be assigned to the deployers
-user_assigned_identity_id="/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/XXXXXXXX/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxxxxxxxxx"
+#user_assigned_identity_id="/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/XXXXXXXX/providers/Microsoft.ManagedIdentity/userAssignedIdentities/xxxxxxxxxx"
 
 
 #########################################################################################
@@ -227,18 +219,18 @@ enable_rbac_authorization_for_keyvault       = true
 #                                                                                       #
 #########################################################################################
 
-# deployer_assign_subscription_permissions is a boolean flag controlling if the deployment credential should be assigned Contribuor permissions on the subscription
-#deployer_assign_subscription_permissions=true
+# deployer_assign_subscription_permissions is a boolean flag controlling if the deployment credential should be assigned Contributor permissions on the subscription
+deployer_assign_subscription_permissions=true
 
 # auto_configure_deployer is a boolean flag controlling if the automation should try to configure the deployer automatically
 # set to false if outbound internet on the deployer is not available
 auto_configure_deployer = true
 
 # Boolean value indicating if firewall should be enabled for key vaults and storage
-enable_firewall_for_keyvaults_and_storage = false
+enable_firewall_for_keyvaults_and_storage = true
 
 # Boolean value indicating if public access should be enabled for key vaults and storage
-public_network_access_enabled = true
+public_network_access_enabled = false
 
 # List of subnet IDs to add to storage account and key vault firewalls"
 #subnets_to_add_to_firewall_for_keyvaults_and_storage=["<azure_resource_id_for_subnet>"]
@@ -266,3 +258,4 @@ public_network_access_enabled = true
 
 # If defined, will add the Azure Application configuration to the control plane
 application_configuration_deployment = true
+

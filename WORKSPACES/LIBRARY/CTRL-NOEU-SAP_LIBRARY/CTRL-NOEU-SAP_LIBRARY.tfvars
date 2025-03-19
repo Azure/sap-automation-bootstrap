@@ -128,6 +128,6 @@ dns_label = "sdaf.ctrl.noeu.contoso.net"
 # use_private_endpoint is a boolean flag controlling if the keyvaults and storage accounts have private endpoints
 use_private_endpoint=true
 
+shared_access_key_enabled = false
 
-# use_spn defines if the deployments are performed using Service Principals or the deployer's managed identiry, true=SPN, false=MSI
-# use_spn = false
+# The parameter 'custom_random_id' can be used to control the random 3 digits at the end of the storage accounts and key vaults
