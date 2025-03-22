@@ -18,7 +18,7 @@ parameters:
   - name:                              sap_system
     displayName:                       "SAP System SID, use this format: ENV-LOCA-VNET-SID"
     type:                              string
-    default:                           X00
+    default:                           TEST-NOEU-SAP01-X00
 
   - name:                              cleanup_workload_zone
     displayName:                       Remove the SAP workload zone
