@@ -440,7 +440,7 @@ stages:
 
                     git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
 
-                    $pipeLineName="11-remover-arm-fallback"
+                    $pipeLineName="11-remover-arm-fallback.yml"
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
