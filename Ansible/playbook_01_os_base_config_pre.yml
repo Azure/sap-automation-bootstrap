@@ -17,8 +17,8 @@
 
   tasks:
     - name:                            "Example on how to ensure a package is installed"
-      ansible.builtin.pip:
-        name:                          jmespath
+      ansible.builtin.package:
+        name:                          python3-jmespath
         state:                         present
 
     - name:                            "Example on how to ensure that a parameter is specified"

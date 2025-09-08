@@ -24,6 +24,7 @@ parameters:
     displayName:                       Bill of Materials name
     type:                              string
     values:
+      - S42023SPS00_v0006ms (HANA_2_00_085)
       - S42023SPS00_v0005ms (HANA_2_00_081)
 
       - S42023SPS00_v0003ms (HANA_2_00_077)
@@ -41,11 +42,13 @@ parameters:
       - S41909SPS03_v0012ms (HANA_2_00_059 - dynamic)
       - S41909ISS00_v0013ms (HANA_2_00_059)
       
+      - NW750SPS20_v0007ms (HANA_2_00_085)
       - NW750SPS20_v0005ms (HANA_2_00_067)
       - NW750SPS20_v0006ms (HANA_2_00_067 - dynamic)
       - NW750SPS25_JAVA_v0001ms (HANA_2_00_067)
       - NW752SPS09_v0002ms (HANA_2_00_067)
-      - NW750SPS25_JAVA__HANA_v0001ms (HANA_2_00_067)
+      - NW750SPS25_JAVA_HANA_v0001ms (HANA_2_00_067)
+      - NW750SPS25_JAVA_HANA_v0002ms (HANA_2_00_077)
     
       - NW750SPS20_DB2_v0002ms (DB2_UDB_11_5)
     
@@ -60,7 +63,7 @@ parameters:
 
       - SOLMAN_72SR2_JAVA_v0001ms (HANA_2_00_081)
       - SOLMAN_72SR2_v0001ms (HANA_2_00_081)
-    
+      
       - HANA_2_00_059_v0011ms
       - HANA_2_00_067_v0006ms
       - HANA_2_00_076_v0001ms
@@ -72,7 +75,7 @@ parameters:
       - ORACLE_19_00_v0003ms
       - ORACLE_19_00_ASM_v0001ms
       - ORACLE_19_00_ORA_MSID_v0002ms
-
+      
       - MSSQLSRV_2019_v0001ms
       
       - SYBASE_1603SP15_v0003ms
