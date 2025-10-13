@@ -43,6 +43,12 @@ parameters:
     type:                              boolean
     default:                           false
 
+  - name:                              test
+    displayName:                       Test deployment - no changes made
+    type:                              boolean
+    default:                           false
+
+
 trigger:                               none
 
 
@@ -72,3 +78,4 @@ extends:
           config_repo_path:            $(Build.SourcesDirectory)/config
           connection_name:             $(AZURE_CONNECTION_NAME)
           force_reset:                 ${{ parameters.reset }}
+          test:                        ${{ parameters.test }}

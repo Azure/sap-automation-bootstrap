@@ -10,6 +10,8 @@ parameters:
     displayName:                       Name of Bill of Materials (BoM)
     type:                              string
     values:
+    values:
+      - NW750SPS20_v0007ms (HANA_2_00_085)
       - S42023SPS00_v0006ms (HANA_2_00_085)
       - S42023SPS00_v0005ms (HANA_2_00_081)
 
@@ -28,7 +30,6 @@ parameters:
       - S41909SPS03_v0012ms (HANA_2_00_059 - dynamic)
       - S41909ISS00_v0013ms (HANA_2_00_059)
       
-      - NW750SPS20_v0007ms (HANA_2_00_085)
       - NW750SPS20_v0005ms (HANA_2_00_067)
       - NW750SPS20_v0006ms (HANA_2_00_067 - dynamic)
       - NW750SPS25_JAVA_v0001ms (HANA_2_00_067)
@@ -38,15 +39,20 @@ parameters:
     
       - NW750SPS20_DB2_v0002ms (DB2_UDB_11_5)
     
+      - NW750_ORACLE_19_v0003ms (Oracle_19 - 2504  - Kernel 754)
+      - NW750_ORACLE_19_v0002ms (Oracle_19 - 2411  - Kernel 754)
       - NW750_ORACLE_19_v0001ms (Oracle_19)
-      - NW750_ORACLE_19_v0002ms (Oracle_19 - Kernel 754)
+
+      - NW750_ORACLE_19_ASM_v0003ms (Oracle_19 - 2504  - Kernel 754)
       - NW750_ORACLE_19_ASM_v0002ms (Oracle_19)
+      
       - NW750SPS25_JAVA_Oracle_19_00_v0001ms (Oracle_19)
     
       - NW750SPS20_SYBASE_v0003ms (ASE_16_0_3)
     
       - NW750_MSSQL_v0003ms (MSSQL_2019)
-
+      - NW750_MSSQL22_v0001ms (MSSQL_2022)
+    
       - SOLMAN_72SR2_JAVA_v0001ms (HANA_2_00_081)
       - SOLMAN_72SR2_v0001ms (HANA_2_00_081)
       
@@ -66,7 +72,6 @@ parameters:
       
       - SYBASE_1603SP15_v0003ms
 
-      - XBOM_Tester
 
 
   - name:                              bom_override_name
