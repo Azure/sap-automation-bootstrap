@@ -92,7 +92,7 @@ parameters:
 
 variables:
   - name:                              deployer_environment
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'),'upper(format('{0}', split('${{ parameters.deployer_environment_parameter }}', '-')[0]), format('{0}', parameters.deployer_environment_parameter)) }}
+    value:                             ${{iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)) }}
    
   - name:                              workload_environment
     value:                             ${{ parameters.workload_environment_parameter }}
@@ -101,16 +101,17 @@ variables:
     value:                             ${{ parameters.deployer_region_parameter }}
 
   - name:                              deployer_folder
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'),parameters.deployer_environment_parameter, format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), parameters.deployer_environment_parameter, format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
   - name:                              deployer_file
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'),format('{0}.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
   - name:                              library_folder
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'),'upper(format('{0}-{1}-SAP_LIBRARY', split('${{ parameters.deployer_environment_parameter }}', '-')[0], split('${{ parameters.deployer_environment_parameter }}', '-')[1]))', format('{0}-{1}-SAP_LIBRARY', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
   - name:                              library_file
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'),'upper(format('{0}-{1}-SAP_LIBRARY.tfvars', split('${{ parameters.deployer_environment_parameter }}', '-')[0], split('${{ parameters.deployer_environment_parameter }}', '-')[1]))', format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY.tfvars', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+
 
   - name:                              deploy_firewall
     value:                             ${{ format('firewall_deployment = {0}', lower(parameters.firewall)) }}
