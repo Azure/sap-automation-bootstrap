@@ -101,10 +101,10 @@ variables:
     value:                             ${{ parameters.deployer_region_parameter }}
 
   - name:                              deployer_folder
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), parameters.deployer_environment_parameter, format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
   - name:                              deployer_file
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
   - name:                              library_folder
     value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
