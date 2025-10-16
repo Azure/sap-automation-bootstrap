@@ -63,7 +63,6 @@ parameters:
     displayName:                       First Workload Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
     default:                           DEV
-      
 
   - name:                              firewall
     displayName:                       Deploy Azure Firewall
@@ -90,10 +89,22 @@ parameters:
     type:                              string
     default:                           ' '
 
+  - name:                              Foo
+    displayName:                       Provide the Azure resource identifier for the Managed Identity MSI to use (optional)
+    type:                              string
+    default:                           $(Deployment_Configuration_Path)
+    
+
+
 variables:
+  - group:                             SDAF-${{ parameters.deployer_environment_parameter }}
+
   - name:                              deployer_environment
     value:                             ${{iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)) }}
-   
+
+  - name:                              control_plane
+    value:                             ${{ parameters.deployer_environment_parameter }}
+
   - name:                              workload_environment
     value:                             ${{ parameters.workload_environment_parameter }}
 
@@ -112,7 +123,6 @@ variables:
   - name:                              library_file
     value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY.tfvars', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
-
   - name:                              deploy_firewall
     value:                             ${{ format('firewall_deployment = {0}', lower(parameters.firewall)) }}
 
@@ -127,9 +137,6 @@ variables:
 
   - name:                              calculated_dns
     value:                             ${{ format('azure.{0}.sdaf.contoso.net', lower(parameters.deployer_region_parameter)) }}
-
-  - name:                              msi_identity_id
-    value:                             ${{ parameters.msi_identity }}
 
 trigger:                               none
 
@@ -208,10 +215,15 @@ stages:
                         "WUS2" { "westus2" }
                     }
 
-                    $msi_id="$(msi_identity_id)".Trim()
+                    $msi_id=$(MSI_ID).Trim()
+                    if ($msi_id.StartsWith('$')) {
+                      $msi_id=""
+                    }
+
 
                     $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
                     $Full_FileName = (Join-Path -path $Full -ChildPath "$(deployer_file)")
+                    $msi_id = $()
 
                     if (Test-Path $Full) {
                         cd $Full
@@ -377,7 +389,7 @@ stages:
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -388,7 +400,7 @@ stages:
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -397,7 +409,7 @@ stages:
                     $pipeLineName="02-sap-workload-zone.yml"
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
                     
@@ -410,7 +422,7 @@ stages:
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
@@ -422,7 +434,7 @@ stages:
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -433,7 +445,7 @@ stages:
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
@@ -447,7 +459,7 @@ stages:
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT","$(deployer_environment)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
