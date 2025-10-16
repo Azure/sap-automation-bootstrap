@@ -80,20 +80,10 @@ parameters:
     default:                           1
 
   - name:                              identity
-    displayName:                       Use a Service Principal for deployments (legacy), unchecking will use a Managed Identity.
+    displayName:                       Use a Service Principal for deployments (legacy)
     type:                              boolean
     default:                           false
 
-  - name:                              msi_identity
-    displayName:                       Provide the Azure resource identifier for the Managed Identity MSI to use (optional)
-    type:                              string
-    default:                           ' '
-
-  - name:                              Foo
-    displayName:                       Provide the Azure resource identifier for the Managed Identity MSI to use (optional)
-    type:                              string
-    default:                           $(Deployment_Configuration_Path)
-    
 
 
 variables:
@@ -215,7 +205,7 @@ stages:
                         "WUS2" { "westus2" }
                     }
 
-                    $msi_id=$(MSI_ID).Trim()
+                    $msi_id="$(MSI_ID)".Trim()
                     if ($msi_id.StartsWith('$')) {
                       $msi_id=""
                     }
