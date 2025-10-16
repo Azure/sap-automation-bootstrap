@@ -80,10 +80,9 @@ parameters:
     default:                           1
 
   - name:                              identity
-    displayName:                       Use a Service Principal for deployments (legacy)
+    displayName:                       Use a Service Principal for deployments (legacy).
     type:                              boolean
     default:                           false
-
 
 
 variables:
@@ -127,7 +126,7 @@ variables:
 
   - name:                              calculated_dns
     value:                             ${{ format('azure.{0}.sdaf.contoso.net', lower(parameters.deployer_region_parameter)) }}
-
+  
 trigger:                               none
 
 stages:
@@ -205,15 +204,19 @@ stages:
                         "WUS2" { "westus2" }
                     }
 
-                    $msi_id="$(MSI_ID)".Trim()
-                    if ($msi_id.StartsWith('$')) {
+                    $msi_id="$(MSI_ID)"
+                    
+                    $msi_id=$msi_id.Trim()
+                    if ($msi_id.Contains('Microsoft.ManagedIdentity')) {
+                      Write-Host "Using Managed Identity ($msi_id)"
+                    }
+                    else {
+                      Write-Host "Not using Managed Identity ($msi_id)"
                       $msi_id=""
                     }
 
-
                     $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
                     $Full_FileName = (Join-Path -path $Full -ChildPath "$(deployer_file)")
-                    $msi_id = $()
 
                     if (Test-Path $Full) {
                         cd $Full
@@ -257,7 +260,10 @@ stages:
                             {
                                 Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
                             }
-    
+                            Add-Content $(deployer_file) ""
+                            Add-Content $(deployer_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                            Add-Content $(deployer_file) ""
+
                             git add -f $(deployer_file)
                             git commit -m "Added Control Plane configuration[skip ci]"
 
@@ -319,6 +325,9 @@ stages:
                         Add-Content $(deployer_file) "  sku             = ""server"","
                         Add-Content $(deployer_file) "  version         = ""latest"""
                         Add-Content $(deployer_file) "}"
+                        Add-Content $(deployer_file) ""
+                        Add-Content $(deployer_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                        Add-Content $(deployer_file) ""
 
                         git add -f $(deployer_file)
                         git commit -m "Added Control Plane configuration[skip ci]"
@@ -344,6 +353,11 @@ stages:
                             Add-Content $(library_file) "use_private_endpoint = true"
                             Add-Content $(library_file) "$(use_spn)"
                             Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
+                            Add-Content $(library_file) ""
+                            Add-Content $(library_file) ""
+                            Add-Content $(library_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                            Add-Content $(library_file) ""
+
                             git add -f $(library_file)
                             git commit -m "Added Control Plane Library configuration[skip ci]"
 
@@ -365,6 +379,9 @@ stages:
                         Add-Content $(library_file) "use_private_endpoint = true"
                         Add-Content $(library_file) "$(use_spn)"
                         Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
+                        Add-Content $(library_file) ""
+                        Add-Content $(library_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                        Add-Content $(library_file) ""
                         git add -f $(library_file)
                         git commit -m "Added Control Plane Library configuration[skip ci]"
 
@@ -374,12 +391,26 @@ stages:
 
                     cd $(Build.Repository.LocalPath)
                     $FolderName = "pipelines"
+
+
+                    $pipeLineName="22-sample-deployer-configuration.yml"
+                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+
+                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
+
+                    git add -f $filePath
+                    git commit -m "Update $pipeLineName[skip ci]"
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
                     $pipeLineName="01-deploy-control-plane.yml"
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT","$(control_plane)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("DEV","$(workload_environment)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
