@@ -74,6 +74,11 @@ parameters:
     type:                              boolean
     default:                           true
 
+  - name:                              appservice
+    displayName:                       Deploy Azure App Service
+    type:                              boolean
+    default:                           false
+
   - name:                              deployer_count
     displayName:                       How many deployers to deploy
     type:                              number
@@ -117,6 +122,9 @@ variables:
 
   - name:                              deploy_bastion
     value:                             ${{ format('bastion_deployment = {0}', lower(parameters.bastion)) }}
+
+  - name:                              deploy_appservice
+    value:                             ${{ format('app_service_deployment = {0}', lower(parameters.appservice)) }}
 
   - name:                              deployer_count
     value:                             ${{ format('deployer_count = {0}', parameters.deployer_count) }}
@@ -238,6 +246,11 @@ stages:
                             Add-Content $(deployer_file) "$(deploy_bastion)"
                             Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
 
+                            Add-Content $(deployer_file) "$(deploy_appservice)"
+                            Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
+
+                            
+
                             Add-Content $(deployer_file) "use_service_endpoint = true"
                             Add-Content $(deployer_file) "use_private_endpoint = true"
                             Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
@@ -289,7 +302,9 @@ stages:
 
                         Add-Content $(deployer_file) "$(deploy_bastion)"
                         Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
-
+                        
+                        Add-Content $(deployer_file) "$(deploy_appservice)"
+                        
                         Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
 
                         Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
