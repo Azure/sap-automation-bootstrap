@@ -15,12 +15,12 @@ parameters:
   - name:                              workload_environment_parameter
     displayName:                       Workload Environment (DEV, QUA, PRD, ...)
     type:                              string
-    default:                           DEV
+    default:                           DEV-WEEU-SAP01
 
   - name:                              deployer_environment_parameter
     displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
-    default:                           MGMT
+    default:                           MGMT-WEEU-DEP01
 
   - name:                              deployer_region_parameter
     displayName:                       Deployer region name code (MGMT, DEV, QA, PRD, ...)

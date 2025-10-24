@@ -21,7 +21,7 @@ parameters:
   - name:                              environment
     displayName:                       "Environment name, MGMT, DEV, QA, etc"
     type:                              string
-    default:                           MGMT
+    default:                           MGMT-WEEU-DEP01
 
   - name:                              use_webapp_param
     displayName:                       "Deploy the configuration web application infrastructure"
