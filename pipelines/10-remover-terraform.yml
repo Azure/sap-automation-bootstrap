@@ -37,7 +37,7 @@ parameters:
   - name:                              deployer_environment_parameter
     displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
-    default:                           MGMT
+    default:                           MGMT-WEEU-DEP01
 
   - name:                              use_deployer
     displayName:                       Run removal on self hosted agent

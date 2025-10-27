@@ -80,7 +80,7 @@ parameters:
 
   - name:                              environment
     displayName:                       Control Plane Environment
-    default:                           MGMT
+    default:                           MGMT-WEEU-DEP01
 
   - name:                              region
     displayName:                       Control Plane (SAP Library) location code

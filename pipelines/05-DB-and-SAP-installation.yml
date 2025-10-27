@@ -18,7 +18,7 @@ parameters:
   - name:                              environment
     displayName:                       Workload Environment (DEV, QUA, PRD, ...)
     type:                              string
-    default:                           DEV
+    default:                           DEV-WEEU-SAP01
 
   - name:                              bom_base_name
     displayName:                       Bill of Materials name
