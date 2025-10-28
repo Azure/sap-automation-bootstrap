@@ -79,6 +79,11 @@ parameters:
     type:                              boolean
     default:                           false
 
+  - name:                              manageddevops
+    displayName:                       Deploy Azure Managed DevOps
+    type:                              boolean
+    default:                           true
+
   - name:                              deployer_count
     displayName:                       How many deployers to deploy
     type:                              number
@@ -125,6 +130,10 @@ variables:
 
   - name:                              deploy_appservice
     value:                             ${{ format('app_service_deployment = {0}', lower(parameters.appservice)) }}
+
+  - name:                              deploy_manageddevops
+    value:                             ${{ format('dev_center_deployment = {0}', lower(parameters.manageddevops)) }}
+
 
   - name:                              deployer_count
     value:                             ${{ format('deployer_count = {0}', parameters.deployer_count) }}
@@ -249,6 +258,8 @@ stages:
                             Add-Content $(deployer_file) "$(deploy_appservice)"
                             Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
 
+                            Add-Content $(deployer_file) "$(deploy_manageddevops)"
+                            Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.0/24"""
                             
 
                             Add-Content $(deployer_file) "use_service_endpoint = true"
@@ -306,6 +317,9 @@ stages:
                         Add-Content $(deployer_file) "$(deploy_appservice)"
                         
                         Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
+
+                        Add-Content $(deployer_file) "$(deploy_manageddevops)"
+                        Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.0/24"""
 
                         Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
 
