@@ -323,7 +323,7 @@ stages:
 
                         Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
 
-                        Add-Content $(deployer_file) "public_network_access_enabled = false"
+                        Add-Content $(deployer_file) "public_network_access_enabled = true"
 
                         Add-Content $(deployer_file) "enable_rbac_authorization = true"
 
