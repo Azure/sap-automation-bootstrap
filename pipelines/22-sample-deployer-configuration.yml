@@ -142,7 +142,7 @@ variables:
     value:                             ${{ format('use_spn = {0}', lower(parameters.identity)) }}
 
   - name:                              calculated_dns
-    value:                             ${{ format('azure.{0}.sdaf.contoso.net', lower(parameters.deployer_region_parameter)) }}
+    value:                             ${{ format('{0}.{1}.sdaf.contoso.net', iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)), lower(parameters.deployer_region_parameter)) }}
   
 trigger:                               none
 
