@@ -482,6 +482,7 @@ stages:
                     $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP01","$(control_plane)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
