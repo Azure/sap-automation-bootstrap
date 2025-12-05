@@ -26,10 +26,14 @@ parameters:
       - EAAS
       - EAUS
       - EUS2
+      - EUSA
+      - EUSG
       - FRCE
       - FRSO
       - GENO
       - GEWC
+      - ISCE
+      - ITNO
       - JAEA
       - JAWE
       - JINC
@@ -40,6 +44,9 @@ parameters:
       - NOEU
       - NOEA
       - NOWE
+      - NzNO
+      - PLCE
+      - QACE
       - SANO
       - SAWE
       - SCUS
@@ -47,6 +54,7 @@ parameters:
       - SOEA
       - SOIN
       - SECE
+      - SESO
       - SWNO
       - SWWE
       - UACE
@@ -58,7 +66,8 @@ parameters:
       - WEIN
       - WEUS
       - WUS2
-
+      - WUS3
+      - NZNO
   - name:                              workload_environment_parameter
     displayName:                       First Workload Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
@@ -180,54 +189,63 @@ stages:
 
                     $FolderName = "WORKSPACES"
                     $region = switch ("$(deployer_region)") {
-                        "AUCE" { "australiacentral" }
-                        "AUC2" { "australiacentral2" }
-                        "AUEA" { "australiaeast" }
-                        "AUSE" { "australiasoutheast" }
-                        "BRSO" { "brazilsouth" }
-                        "BRSE" { "brazilsoutheast" }
-                        "BRUS" { "brazilus" }
-                        "CACE" { "canadacentral" }
-                        "CAEA" { "canadaeast" }
-                        "CEIN" { "centralindia" }
-                        "CEUS" { "centralus" }
-                        "CEUA" { "centraluseuap" }
-                        "EAAS" { "eastasia" }
-                        "EAUS" { "eastus" }
-                        "EUS2" { "eastus2" }
-                        "FRCE" { "francecentral" }
-                        "FRSO" { "francesouth" }
-                        "GENO" { "germanynorth" }
-                        "GEWC" { "germanywestcentral" }
-                        "JAEA" { "japaneast" }
-                        "JAWE" { "japanwest" }
-                        "JINC" { "jioindiacentral" }
-                        "JINW" { "jioindiawest" }
-                        "KOCE" { "koreacentral" }
-                        "KOSO" { "koreasouth" }
-                        "NCUS" { "northcentralus" }
-                        "NOEU" { "northeurope" }
-                        "NOEA" { "norwayeast" }
-                        "NOWE" { "norwaywest" }
-                        "SANO" { "southafricanorth" }
-                        "SAWE" { "southafricawest" }
-                        "SCUS" { "southcentralus" }
-                        "SCUG" { "southcentralusstg" }
-                        "SOEA" { "southeastasia" }
-                        "SOIN" { "southindia" }
-                        "SECE" { "swedencentral" }
-                        "SWNO" { "switzerlandnorth" }
-                        "SWWE" { "switzerlandwest" }
-                        "UACE" { "uaecentral" }
-                        "UANO" { "uaenorth" }
-                        "UKSO" { "uksouth" }
-                        "UKWE" { "ukwest" }
-                        "WCUS" { "westcentralus" }
-                        "WEEU" { "westeurope" }
-                        "WEIN" { "westindia" }
-                        "WEUS" { "westus" }
-                        "WUS2" { "westus2" }
-                    }
+                     "auce" = { australiacentral" } 
+                     "auc2" = { "australiacentral2" }
+                     "auea" = { "australiaeast" }
+                     "ause" = { "australiasoutheast" }
+                     "brso" = { "brazilsouth" }
+                     "brse" = { "brazilsoutheast" }
+                     "brus" = { "brazilus" }
+                     "cace" = { "canadacentral" }
+                     "caea" = { "canadaeast" }
+                     "cein" = { "centralindia"       }
+                     "ceus" = { "centralus"  }
+                     "ceua" = { "centraluseuap" }
+                     "eaas" = { "eastasia" }
+                     "eaus" = { "eastus" }
+                     "eus2" = { "eastus2" }
+                     "eusa" = { "eastus2euap" }
+                     "eusg" = { "eastusstg"  }
+                     "frce" = { "francecentral" }
+                     "frso" = { "francesouth" }
+                     "geno" = { "germanynorth" }
+                     "gewc" = { "germanywestcentral" }
+                     "isce" = { "israelcentral" }
+                     "itno" = { "italynorth" }
+                     "jaea" = { "japaneast" }
+                     "jawe" = { "japanwest" }
+                     "jinc" = { "jioindiacentral" }
+                     "jinw" = { "jioindiawest" }
+                     "koce" = { "koreacentral" }
+                     "koso" = { "koreasouth" }
+                     "ncus" = { "northcentralus" }
+                     "noeu" = { "northeurope" }
+                     "noea" = { "norwayeast" }
+                     "nowe" = { "norwaywest" }
+                     "nzno" = { "newzealandnorth" } 
+                     "plce" = { "polandcentral" }
+                     "qace" = { "qatarcentral"       }
+                     "sano" = { "southafricanorth" }
+                     "sawe" = { "southafricawest" }
+                     "scus" = { "southcentralus" }
+                     "scug" = { "southcentralusstg"  }
+                     "soea" = { "southeastasia" }
+                     "soin" = { "southindia" }
+                     "sece" = { "swedencentral" }
+                     "seso" = { "swedensouth" }
+                     "swno" = { "switzerlandnorth" }
+                     "swwe" = { "switzerlandwest" }
+                     "uace" = { "uaecentral" }
+                     "uano" = { "uaenorth" }
+                     "ukso" = { "uksouth" }
+                     "ukwe" = { "ukwest" }
+                     "wcus" = { "westcentralus" }
+                     "weeu" = { "westeurope" }
+                     "wein" = { "westindia"  }
+                     "weus" = { "westus" }
+                     "wus2" = { "westus2" 
+                     "wus3" = { "westus3" }
+                     "nzno" = { "newzealandnorth" }                    }
 
                     $msi_id="$(MSI_ID)"
                     
@@ -264,10 +282,10 @@ stages:
                             Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
 
                             Add-Content $(deployer_file) "$(deploy_appservice)"
-                            Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
+                            Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/28"""
 
                             Add-Content $(deployer_file) "$(deploy_manageddevops)"
-                            Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.0/24"""
+                            Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.96/27"""
 
                             Add-Content $(deployer_file) "$(deploy_appconfig)"
                             
