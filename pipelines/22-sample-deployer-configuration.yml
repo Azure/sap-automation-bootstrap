@@ -179,7 +179,6 @@ stages:
             displayName:               "Create Sample"
             inputs:
               targetType:              "inline"
-
               script: |
                     git fetch -q --all
                     git checkout -q $(Build.SourceBranchName)
@@ -189,73 +188,72 @@ stages:
 
                     $FolderName = "WORKSPACES"
                     $region = switch ("$(deployer_region)") {
-                     "auce" = { australiacentral" } 
-                     "auc2" = { "australiacentral2" }
-                     "auea" = { "australiaeast" }
-                     "ause" = { "australiasoutheast" }
-                     "brso" = { "brazilsouth" }
-                     "brse" = { "brazilsoutheast" }
-                     "brus" = { "brazilus" }
-                     "cace" = { "canadacentral" }
-                     "caea" = { "canadaeast" }
-                     "cein" = { "centralindia"       }
-                     "ceus" = { "centralus"  }
-                     "ceua" = { "centraluseuap" }
-                     "eaas" = { "eastasia" }
-                     "eaus" = { "eastus" }
-                     "eus2" = { "eastus2" }
-                     "eusa" = { "eastus2euap" }
-                     "eusg" = { "eastusstg"  }
-                     "frce" = { "francecentral" }
-                     "frso" = { "francesouth" }
-                     "geno" = { "germanynorth" }
-                     "gewc" = { "germanywestcentral" }
-                     "isce" = { "israelcentral" }
-                     "itno" = { "italynorth" }
-                     "jaea" = { "japaneast" }
-                     "jawe" = { "japanwest" }
-                     "jinc" = { "jioindiacentral" }
-                     "jinw" = { "jioindiawest" }
-                     "koce" = { "koreacentral" }
-                     "koso" = { "koreasouth" }
-                     "ncus" = { "northcentralus" }
-                     "noeu" = { "northeurope" }
-                     "noea" = { "norwayeast" }
-                     "nowe" = { "norwaywest" }
-                     "nzno" = { "newzealandnorth" } 
-                     "plce" = { "polandcentral" }
-                     "qace" = { "qatarcentral"       }
-                     "sano" = { "southafricanorth" }
-                     "sawe" = { "southafricawest" }
-                     "scus" = { "southcentralus" }
-                     "scug" = { "southcentralusstg"  }
-                     "soea" = { "southeastasia" }
-                     "soin" = { "southindia" }
-                     "sece" = { "swedencentral" }
-                     "seso" = { "swedensouth" }
-                     "swno" = { "switzerlandnorth" }
-                     "swwe" = { "switzerlandwest" }
-                     "uace" = { "uaecentral" }
-                     "uano" = { "uaenorth" }
-                     "ukso" = { "uksouth" }
-                     "ukwe" = { "ukwest" }
-                     "wcus" = { "westcentralus" }
-                     "weeu" = { "westeurope" }
-                     "wein" = { "westindia"  }
-                     "weus" = { "westus" }
-                     "wus2" = { "westus2" 
-                     "wus3" = { "westus3" }
-                     "nzno" = { "newzealandnorth" }                    }
+                     "auce" { "australiacentral" } 
+                     "auc2" { "australiacentral2" }
+                     "auea" { "australiaeast" }
+                     "ause" { "australiasoutheast" }
+                     "brso" { "brazilsouth" }
+                     "brse" { "brazilsoutheast" }
+                     "brus" { "brazilus" }
+                     "cace" { "canadacentral" }
+                     "caea" { "canadaeast" }
+                     "cein" { "centralindia" }
+                     "ceus" { "centralus"  }
+                     "ceua" { "centraluseuap" }
+                     "eaas" { "eastasia" }
+                     "eaus" { "eastus" }
+                     "eus2" { "eastus2" }
+                     "eusa" { "eastus2euap" }
+                     "eusg" { "eastusstg"  }
+                     "frce" { "francecentral" }
+                     "frso" { "francesouth" }
+                     "geno" { "germanynorth" }
+                     "gewc" { "germanywestcentral" }
+                     "isce" { "israelcentral" }
+                     "itno" { "italynorth" }
+                     "jaea" { "japaneast" }
+                     "jawe" { "japanwest" }
+                     "jinc" { "jioindiacentral" }
+                     "jinw" { "jioindiawest" }
+                     "koce" { "koreacentral" }
+                     "koso" { "koreasouth" }
+                     "ncus" { "northcentralus" }
+                     "noeu" { "northeurope" }
+                     "noea" { "norwayeast" }
+                     "nowe" { "norwaywest" }
+                     "nzno" { "newzealandnorth" } 
+                     "plce" { "polandcentral" }
+                     "qace" { "qatarcentral"       }
+                     "sano" { "southafricanorth" }
+                     "sawe" { "southafricawest" }
+                     "scus" { "southcentralus" }
+                     "scug" { "southcentralusstg"  }
+                     "soea" { "southeastasia" }
+                     "soin" { "southindia" }
+                     "sece" { "swedencentral" }
+                     "seso" { "swedensouth" }
+                     "swno" { "switzerlandnorth" }
+                     "swwe" { "switzerlandwest" }
+                     "uace" { "uaecentral" }
+                     "uano" { "uaenorth" }
+                     "ukso" { "uksouth" }
+                     "ukwe" { "ukwest" }
+                     "wcus" { "westcentralus" }
+                     "weeu" { "westeurope" }
+                     "wein" { "westindia"  }
+                     "weus" { "westus" }
+                     "wus2" { "westus2" }
+                     "wus3" { "westus3" }
+                     "nzno" { "newzealandnorth" }                    }
 
-                    $msi_id="$(MSI_ID)"
-                    
-                    $msi_id=$msi_id.Trim()
-                    if ($msi_id.Contains('Microsoft.ManagedIdentity')) {
-                      Write-Host "Using Managed Identity ($msi_id)"
+                    $msi_id_val = '$(MSI_ID)'
+                    $msi_id = if ($msi_id_val -match 'Microsoft\.ManagedIdentity') { 
+                        Write-Host "Using Managed Identity ($msi_id_val)"
+                        $msi_id_val.Trim() 
                     }
-                    else {
-                      Write-Host "Not using Managed Identity ($msi_id)"
-                      $msi_id=""
+                    else { 
+                        Write-Host "Not using Managed Identity"
+                        "" 
                     }
 
                     $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
