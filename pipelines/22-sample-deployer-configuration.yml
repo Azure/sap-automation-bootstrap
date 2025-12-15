@@ -44,7 +44,7 @@ parameters:
       - NOEU
       - NOEA
       - NOWE
-      - NzNO
+      - NZNO
       - PLCE
       - QACE
       - SANO
@@ -67,7 +67,6 @@ parameters:
       - WEUS
       - WUS2
       - WUS3
-      - NZNO
   - name:                              workload_environment_parameter
     displayName:                       First Workload Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
@@ -243,8 +242,7 @@ stages:
                      "wein" { "westindia"  }
                      "weus" { "westus" }
                      "wus2" { "westus2" }
-                     "wus3" { "westus3" }
-                     "nzno" { "newzealandnorth" }                    }
+                     "wus3" { "westus3" }                    }
 
                     $msi_id_val = '$(MSI_ID)'
                     $msi_id = if ($msi_id_val -match 'Microsoft\.ManagedIdentity') { 
