@@ -1,0 +1,112 @@
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Download the software from SAP                                               |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+name:                                  SAP Software download $(bom) $(environment_code) $(location_code)
+
+parameters:
+  - name:                              application_bom_base_name
+    displayName:                       Name of Application Bill of Materials (BoM)
+    type:                              string
+    values:
+      - APP_S4_2025_v0001ms
+      - APP_S4_2023_v0001ms
+      - APP_S4_2022_v0001ms
+      - APP_NW_750_v0001ms
+      - APP_NW_750_JAVA_v0001ms
+    default:                           APP_S4_2025_v0001ms
+      
+  - name:                              kernel_bom_base_name
+    displayName:                       Name of Kernel Bill of Materials (BoM)
+    type:                              string
+    values:
+      - SAP_KERNEL_916_latest
+      - SAP_KERNEL_793_latest
+      - SAP_KERNEL_754_latest
+      - SAP_KERNEL_753_latest
+    default:                           SAP_KERNEL_916_latest
+
+  - name:                              db_bom_base_name
+    displayName:                       Name of Database Bill of Materials (BoM)
+    type:                              string
+    values:
+
+      - DB_HANA_2_00_SPS06_latest
+      - DB_HANA_2_00_SPS07_latest
+      - DB_HANA_2_00_SPS08_latest
+      
+      - DB_Oracle19_v2602ms
+      - DB_Oracle19_v2511ms
+      - DB_Oracle19_v2508ms
+      
+      - DB2_UDB_11_5_v0001ms
+      
+      - DB_MSSQLSRV_2019_v0001ms
+      
+      - DB_SYBASE_1603SP15_v0003ms
+    default:                           DB_HANA_2_00_SPS08_latest
+
+  - name:                              platform
+    displayName:                       Database platform
+    type:                              string
+    values:
+      - HANA
+      - ORACLE
+      - ORACLE-ASM
+      - DB2
+      - SQLSERVER
+      - SYBASE
+    default:                           HANA
+
+  - name:                              bom_save_name
+    displayName:                       Name for the combined BoM, defaults to Application BoM name
+    default:                           ' '
+    type:                              string
+
+
+  - name:                              bom_override_name
+    displayName:                       Custom Bill of Materials. Use format (App BoM-Db BoM-Kernel Bom-CustomName), for example AppBom-DBBoM-S4BoM
+    default:                           ' '
+    type:                              string
+
+  - name:                              environment
+    displayName:                       Control Plane Environment
+    default:                           CPLN-NOEU-DEP01
+
+  - name:                              extra_params
+    displayName:                       Extra Parameters
+    type:                              string
+    default:                           ' '
+
+  - name:                              re_download
+    displayName:                       Re-download software from SAP
+    type:                              boolean
+    default:                           false
+
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 04-sap-software-download.yaml from the code repository                 |
+# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+trigger:                               none
+
+
+pool:
+  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
+
+extends:
+  template:                            ./resources_including_samples.yml
+  parameters:
+    stages:
+      - template:                      deploy\pipelines\04-sap-software-download.yaml@sap-automation
+        parameters:
+          bom_base_name:               ${{ coalesce(trim(parameters.bom_override_name), format('{0}-{1}-{2}-{3}', parameters.application_bom_base_name, parameters.db_bom_base_name, parameters.kernel_bom_base_name, coalesce(trim(parameters.bom_save_name), parameters.application_bom_base_name))) }}
+          environment:                 ${{ parameters.environment }}
+          region:                      ${{ split(parameters.environment, '-')[1] }}
+          re_download:                 ${{ parameters.re_download }}
+          sap_automation_repo_path:    $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:            $(Build.SourcesDirectory)/config
+          sample_repo_path:            $(Build.SourcesDirectory)/samples
+          ExtraParams:                 ${{ format('-e platform={0} {1}', parameters.platform, parameters.extra_params) }}
