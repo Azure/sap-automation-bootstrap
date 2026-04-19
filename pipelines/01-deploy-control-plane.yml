@@ -11,7 +11,7 @@ parameters:
   - name:                              deployer
     displayName:                       "Deployer configuration name, use the following syntax: ENV-LOCA-VNET-INFRASTRUCTURE"
     type:                              string
-    default:                           MGMT-WEEU-DEP01-INFRASTRUCTURE
+    default:                           MGMT-WEEU-DEP00-INFRASTRUCTURE
 
   - name:                              library
     displayName:                       "SAP Library configuration name, use the following syntax: ENV-LOCA-SAP_LIBRARY"
@@ -21,7 +21,7 @@ parameters:
   - name:                              environment
     displayName:                       "Environment name, MGMT, DEV, QA, etc"
     type:                              string
-    default:                           MGMT-WEEU-DEP01
+    default:                           MGMT-WEEU-DEP00
 
   - name:                              use_webapp_param
     displayName:                       "Deploy the configuration web application infrastructure"

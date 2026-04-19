@@ -20,7 +20,7 @@ parameters:
   - name:                              deployer_environment_parameter
     displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
-    default:                           MGMT-WEEU-DEP01
+    default:                           MGMT-WEEU-DEP00
 
   - name:                              deployer_region_parameter
     displayName:                       Deployer region name code (MGMT, DEV, QA, PRD, ...)

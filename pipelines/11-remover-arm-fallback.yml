@@ -38,7 +38,7 @@ parameters:
   - name:                              deployer
     displayName:                       "Deployer configuration name, use this format: ENV-LOCA-VNET-INFRASTRUCTURE"
     type:                              string
-    default:                           MGMT-WEEU-DEP01-INFRASTRUCTURE
+    default:                           MGMT-WEEU-DEP00-INFRASTRUCTURE
 
   - name:                              library
     displayName:                       "Library configuration name, use this format: ENV-LOCA-SAP_LIBRARY"
@@ -53,7 +53,7 @@ parameters:
   - name:                              deployer_environment_parameter
     displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
     type:                              string
-    default:                           MGMT-WEEU-DEP01
+    default:                           MGMT-WEEU-DEP00
 
 trigger:                               none
 
