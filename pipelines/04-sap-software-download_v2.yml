@@ -72,7 +72,7 @@ parameters:
 
   - name:                              environment
     displayName:                       Control Plane Environment
-    default:                           CPLN-NOEU-DEP01
+    default:                           MGMT-WEEU-DEP00
 
   - name:                              extra_params
     displayName:                       Extra Parameters
