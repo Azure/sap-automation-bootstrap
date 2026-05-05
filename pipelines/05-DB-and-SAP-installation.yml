@@ -24,7 +24,7 @@ parameters:
     displayName:                       Bill of Materials name
     type:                              string
     values:
-      - S42023SPS00_v88_0ms (HANA_2_00_088) 
+      - S42023SPS00_v88_v0001ms (HANA_2_00_088) 
       - S42023SPS00_v87_0ms (HANA_2_00_087) 
 
       - S42023SPS00_v0006ms (HANA_2_00_085)
@@ -45,7 +45,7 @@ parameters:
       - S41909SPS03_v0012ms (HANA_2_00_059 - dynamic)
       - S41909ISS00_v0013ms (HANA_2_00_059)
       
-      - NW750SPS20_v0008ms (HANA_2_00_088)
+      - NW750SPS20_v0009ms (HANA_2_00_088)
       - NW750SPS20_v0007ms (HANA_2_00_085)
 
       - NW750SPS20_v0005ms (HANA_2_00_067)
