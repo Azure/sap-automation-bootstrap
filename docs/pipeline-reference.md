@@ -10,8 +10,8 @@ All pipeline files in this repository use `trigger: none`.
 
 | File | Repositories | Agent paths |
 | --- | --- | --- |
-| `pipelines/resources.yml` | `sap-automation` | Core `/sap-automation`; self `/config` |
-| `pipelines/resources_including_samples.yml` | `sap-automation`, `sap-samples` | Core `/sap-automation`; samples `/samples`; self `/config` |
+| `pipelines/resources.yml` | `sap-automation` | Core `$(Build.SourcesDirectory)/sap-automation`; self `$(Build.SourcesDirectory)/config` |
+| `pipelines/resources_including_samples.yml` | `sap-automation`, `sap-samples` | Core `$(Build.SourcesDirectory)/sap-automation`; samples `$(Build.SourcesDirectory)/samples`; self `$(Build.SourcesDirectory)/config` |
 
 Both resource files currently use `ref: main`. The two software-download
 wrappers correctly use `resources_including_samples.yml`.

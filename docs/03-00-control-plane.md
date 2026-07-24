@@ -49,7 +49,8 @@ rewrites defaults in selected pipeline wrappers.
 The core template prepares the execution agent, stores deployment credentials
 in Key Vault, deploys the control plane, and optionally builds and deploys the
 configuration Web application. Repository checkouts map the core repository to
-`/sap-automation` and this repository to `/config`.
+`$(Build.SourcesDirectory)/sap-automation` and this repository to
+`$(Build.SourcesDirectory)/config`.
 
 ## Review before execution
 
