@@ -23,10 +23,10 @@ parameters:
   - name:                              test_type
     displayName:                       Test type
     type:                              string
-    default:                           SAPFunctionalTests
+    default:                           ConfigurationChecks
     values:
-      - SAPFunctionalTests
       - ConfigurationChecks
+      - SAPFunctionalTests
 
   - name:                              sap_functional_test_type
     displayName:                       "SAP functional test type (ignored for ConfigurationChecks)"
@@ -38,12 +38,12 @@ parameters:
       - AzureBackupDatabase
 
   - name:                              test_groups
-    displayName:                       "Test groups to run, comma separated (empty runs the whole test type)"
+    displayName:                       "Test group to run, a single exact group name such as HA_SCS (empty runs the whole test type)"
     type:                              string
     default:                           " "
 
   - name:                              test_cases
-    displayName:                       "Test cases to run, comma separated (empty runs the whole group)"
+    displayName:                       "Test case task names to run, comma separated, such as ascs-migration (requires a test group)"
     type:                              string
     default:                           " "
 
