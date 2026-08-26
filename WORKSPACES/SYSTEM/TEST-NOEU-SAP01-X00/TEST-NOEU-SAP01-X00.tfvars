@@ -497,6 +497,11 @@ NFS_provider = "AFS"
 # use_random_id_for_storageaccounts defines if the sapmnt storage account name will have a random suffix
 use_random_id_for_storageaccounts = true
 
+# AFS_usr_sap, if defined, uses the existing Azure Files sapmnt storage for application tier /usr/sap, with each application server including the PAS mounting its own directory.
+# When enabling this, increase sapmnt_volume_size beyond the 128 GB default because /usr/sap shares the same Azure Files quota as /sapmnt/<SID>; application server work directories and dev traces can exhaust the quota and take /sapmnt/<SID> down for the whole SID.
+# This setting is independent of use_simple_mount and /sapmnt placement, and only applies when NFS_provider = "AFS".
+#AFS_usr_sap = false
+
 # ANF_HANA_use_AVG defines if the ANF volume will be created in an Application Volume Group
 ANF_HANA_use_AVG = false
 
