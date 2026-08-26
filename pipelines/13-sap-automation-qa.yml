@@ -7,7 +7,7 @@
 # |                                                                            |
 # +------------------------------------4--------------------------------------*/
 
-name:                                  SAP Quality Assurance $(sap_system_configuration_name)
+name:                                  SAP Quality Assurance ${{ parameters.sap_system_configuration_name }}
 
 parameters:
   - name:                              sap_system_configuration_name
@@ -40,12 +40,12 @@ parameters:
   - name:                              test_groups
     displayName:                       "Test group to run, a single exact group name such as HA_SCS (empty runs the whole test type)"
     type:                              string
-    default:                           " "
+    default:                           ""
 
   - name:                              test_cases
     displayName:                       "Test case task names to run, comma separated, such as ascs-migration (requires a test group)"
     type:                              string
-    default:                           " "
+    default:                           ""
 
   - name:                              offline_mode
     displayName:                       Run the high availability tests in offline mode
@@ -55,12 +55,12 @@ parameters:
   - name:                              extra_params
     displayName:                       "Extra Parameters, for example '-e telemetry_data_destination=azureloganalytics'"
     type:                              string
-    default:                           " "
+    default:                           ""
 
 #--------------------------------------+---------------------------------------8
 #                                                                              |
 # Calls 13-sap-automation-qa.yaml from the code repository                     |
-# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+# The tests are long running, so an agent from a self hosted pool is required  |
 #                                                                              |
 #--------------------------------------+---------------------------------------8
 trigger:                               none
@@ -78,8 +78,8 @@ extends:
           environment:                   ${{ parameters.environment }}
           test_type:                     ${{ parameters.test_type }}
           sap_functional_test_type:      ${{ parameters.sap_functional_test_type }}
-          test_groups:                   ${{ trim(parameters.test_groups) }}
-          test_cases:                    ${{ trim(parameters.test_cases) }}
+          test_groups:                   ${{ parameters.test_groups }}
+          test_cases:                    ${{ parameters.test_cases }}
           offline_mode:                  ${{ parameters.offline_mode }}
           extra_params:                  ${{ parameters.extra_params }}
           sap_automation_repo_path:      $(Build.SourcesDirectory)/sap-automation
