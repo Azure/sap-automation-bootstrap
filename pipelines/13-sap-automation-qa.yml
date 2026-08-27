@@ -1,0 +1,86 @@
+---
+# /*---------------------------------------------------------------------------8
+# |                                                                            |
+# |               This pipeline performs the SAP quality assurance             |
+# |              tests and must run on a self hosted deployment agent          |
+# |                      due to long run time                                  |
+# |                                                                            |
+# +------------------------------------4--------------------------------------*/
+
+name:                                  SAP Quality Assurance ${{ parameters.sap_system_configuration_name }}
+
+parameters:
+  - name:                              sap_system_configuration_name
+    displayName:                       "SAP System configuration name, use the following syntax: ENV-LOCA-VNET-SID"
+    type:                              string
+    default:                           DEV-WEEU-SAP01-X00
+
+  - name:                              environment
+    displayName:                       Workload Environment (DEV, QUA, PRD, ...)
+    type:                              string
+    default:                           DEV-WEEU-SAP01
+
+  - name:                              test_type
+    displayName:                       Test type
+    type:                              string
+    default:                           ConfigurationChecks
+    values:
+      - ConfigurationChecks
+      - SAPFunctionalTests
+
+  - name:                              sap_functional_test_type
+    displayName:                       "SAP functional test type (ignored for ConfigurationChecks)"
+    type:                              string
+    default:                           DatabaseHighAvailability
+    values:
+      - DatabaseHighAvailability
+      - CentralServicesHighAvailability
+      - AzureBackupDatabase
+
+  - name:                              test_groups
+    displayName:                       "Test group to run, a single exact group name such as HA_SCS (empty runs the whole test type)"
+    type:                              string
+    default:                           ""
+
+  - name:                              test_cases
+    displayName:                       "Test case task names to run, comma separated, such as ascs-migration (requires a test group)"
+    type:                              string
+    default:                           ""
+
+  - name:                              offline_mode
+    displayName:                       Run the high availability tests in offline mode
+    type:                              boolean
+    default:                           false
+
+  - name:                              extra_params
+    displayName:                       "Extra Parameters, for example '-e telemetry_data_destination=azureloganalytics'"
+    type:                              string
+    default:                           ""
+
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 13-sap-automation-qa.yaml from the code repository                     |
+# The tests are long running, so an agent from a self hosted pool is required  |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+trigger:                               none
+
+pool:
+  name:                                $[coalesce(variables['POOL'], variables['Agent'])]
+
+extends:
+  template:                            ./resources.yml
+  parameters:
+    stages:
+      - template:                      deploy\pipelines\13-sap-automation-qa.yaml@sap-automation
+        parameters:
+          sap_system_configuration_name: ${{ parameters.sap_system_configuration_name }}
+          environment:                   ${{ parameters.environment }}
+          test_type:                     ${{ parameters.test_type }}
+          sap_functional_test_type:      ${{ parameters.sap_functional_test_type }}
+          test_groups:                   ${{ parameters.test_groups }}
+          test_cases:                    ${{ parameters.test_cases }}
+          offline_mode:                  ${{ parameters.offline_mode }}
+          extra_params:                  ${{ parameters.extra_params }}
+          sap_automation_repo_path:      $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:              $(Build.SourcesDirectory)/config

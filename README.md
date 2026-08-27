@@ -15,6 +15,58 @@ Use the current Microsoft Learn article,
 as the supported setup baseline. The pages in this repository organize that
 journey and add details verified against the current wrapper pipelines.
 
+## Install the SDAF AI skills for Azure DevOps
+
+This repository ships the **`azure-sap-automation-devops`** plugin — the
+Azure DevOps platform-specific plugin in the SDAF AI-skills family.
+Installing it gives GitHub Copilot CLI, Claude Code, or Gemini CLI two
+grounded skills: `sdaf-ado-project-bootstrap` (drives project + workload-zone
+bootstrap) and `sdaf-ado-pipeline-catalogue` (answers questions about the 13
+wrapper pipelines in [`pipelines/`](pipelines/)).
+
+**All SDAF AI plugins are optional and independently installable.** For
+complete coverage on a given platform, install the pairing that matches how
+you run SDAF:
+
+- **Local execution** — hub plugin from
+  [`Azure/sap-automation`](https://github.com/Azure/sap-automation).
+- **Azure DevOps** — hub plugin **plus** this `azure-sap-automation-devops`
+  plugin.
+- **GitHub Actions** — hub plugin **plus**
+  [`azure-sap-automation-github`](https://github.com/Azure/sap-automation-gh-bootstrap)
+  from [`Azure/sap-automation-gh-bootstrap`](https://github.com/Azure/sap-automation-gh-bootstrap).
+
+This Azure DevOps plugin installs on its own; it will not fetch the hub for
+you. Install the hub separately if you want its framework-level content
+loaded at the same time.
+
+Pick the section for your CLI. Full operator guide, verification steps,
+example prompts, and troubleshooting live in [`docs/PLUGINS.md`](docs/PLUGINS.md).
+
+### GitHub Copilot CLI
+
+```bash
+copilot plugin marketplace add Azure/sap-automation-bootstrap
+copilot plugin install azure-sap-automation-devops@sap-automation-bootstrap
+```
+
+### Claude Code
+
+```text
+/plugin marketplace add Azure/sap-automation-bootstrap
+/plugin install azure-sap-automation-devops@sap-automation-bootstrap
+```
+
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/Azure/sap-automation-bootstrap
+```
+
+Use `gemini extensions install` (not `gemini skills install`) — the extension
+reads the root [`gemini-extension.json`](gemini-extension.json) and auto-loads
+the root [`skills/`](skills/) directory.
+
 ## Start the Azure DevOps journey
 
 Complete the journey in order:

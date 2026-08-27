@@ -1,0 +1,13 @@
+{
+  "name": "sap-automation-bootstrap",
+  "description": "SDAF Azure DevOps surface skills: bootstrap the Azure DevOps project and onboard workload zones, plus a catalogue of the 13 wrapper pipelines shipped in this repository. Grounded strictly in this repo's docs/. Independently installable; pair with the sap-automation hub plugin for complete Azure DevOps coverage.",
+  "owner": { "name": "Microsoft" },
+  "plugins": [
+    {
+      "name": "azure-sap-automation-devops",
+      "source": ".",
+      "description": "SDAF Azure DevOps surface skills: bootstrap the Azure DevOps project and onboard workload zones, plus a catalogue of the 13 wrapper pipelines shipped in this repository. Grounded strictly in this repo's docs/. Independently installable; pair with the sap-automation hub plugin for complete Azure DevOps coverage.",
+      "version": "0.1.0"
+    }
+  ]
+}
