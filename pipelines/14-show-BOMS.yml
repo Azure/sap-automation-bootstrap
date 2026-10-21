@@ -1,0 +1,43 @@
+---
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
+# /*---------------------------------------------------------------------------8
+# |                                                                            |
+# |      This pipeline shows the Bill of Materials files.                     |
+# |                                                                            |
+# +------------------------------------4--------------------------------------*/
+
+
+name:                                  SAP Bill of Materials
+parameters:
+  - name:                              control_plane_name
+    displayName:                       "Control Plane Name"
+    type:                              string
+    default:                           MGMT-WEEU-DEP00
+    values:
+      - MGMT-WEEU-DEP00
+
+
+#--------------------------------------+---------------------------------------8
+#                                                                              |
+# Calls 14-show-BOMS.yaml from the code repository                                   |
+# If an Agent pool is defined it will be used otherwise Microsoft hosted       |
+#                                                                              |
+#--------------------------------------+---------------------------------------8
+trigger:                                   none
+
+
+
+pool:
+  name:                                    $[coalesce(variables['POOL'], variables['Agent'])]
+
+extends:
+  template:                                ./resources.yml
+  parameters:
+    stages:
+      - template:                          deploy\pipelines\14-show-BOMS.yaml@sap-automation
+        parameters:
+          control_plane_name:              ${{ parameters.control_plane_name }}
+          sap_automation_repo_path:        $(Build.SourcesDirectory)/sap-automation
+          config_repo_path:                $(Build.SourcesDirectory)/config          
