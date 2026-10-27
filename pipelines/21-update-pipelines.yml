@@ -65,6 +65,7 @@
                 git checkout --quiet remote-repo/main ./pipelines/02-sap-workload-zone.yml
                 git checkout --quiet remote-repo/main ./pipelines/03-sap-system-deployment.yml
                 git checkout --quiet remote-repo/main ./pipelines/04-sap-software-download.yml
+                git checkout --quiet remote-repo/main ./pipelines/04-sap-software-download_v2.yml
                 git checkout --quiet remote-repo/main ./pipelines/05-DB-and-SAP-installation.yml
                 git checkout --quiet remote-repo/main ./pipelines/10-remover-terraform.yml
                 git checkout --quiet remote-repo/main ./pipelines/11-remover-arm-fallback.yml
