@@ -36,6 +36,7 @@ parameters:
       - DB_HANA_2_00_SPS07_latest
       - DB_HANA_2_00_SPS08_latest
       
+      - DB_Oracle19_v2608ms
       - DB_Oracle19_v2602ms
       - DB_Oracle19_v2511ms
       - DB_Oracle19_v2508ms
