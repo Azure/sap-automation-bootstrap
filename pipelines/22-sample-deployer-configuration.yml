@@ -449,9 +449,9 @@ stages:
                 $pipeLineName="22-sample-deployer-configuration.yml"
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
                 if ( (Test-Path $filePath)) {
-                    (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WUS3-DEP13","$(control_plane)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
 
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
@@ -462,9 +462,9 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
 
                   git add -f $filePath
                   git commit -m "Update $pipeLineName[skip ci]"
@@ -475,9 +475,9 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
 
                   git add -f $filePath
                   git commit -m "Update $pipeLineName[skip ci]"
@@ -488,7 +488,7 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
@@ -501,7 +501,7 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
 
                   git add -f $filePath
@@ -514,7 +514,7 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
                   git add -f $filePath
@@ -527,7 +527,7 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
                   git add -f $filePath
@@ -540,7 +540,7 @@ stages:
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
@@ -555,9 +555,9 @@ stages:
 
                 if ( (Test-Path $filePath)) {
                 
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
                   (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
                 
                   git add -f $filePath
@@ -569,7 +569,7 @@ stages:
                 $pipeLineName="pipelines/14-show-BOMS.yml"
                 $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
                 if ( (Test-Path $filePath)) {
-                  (Get-Content $filePath).Replace("MGMT-WUS3-DEP13-WUS3-DEP13-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(control_plane)") | Set-Content $filePath
 
                   git add -f $filePath
                   git commit -m "Update $pipeLineName[skip ci]"
