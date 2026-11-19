@@ -1,15 +1,15 @@
-name:                                  Create Deployer Configuration
+name: Create Deployer Configuration
 
 parameters:
-  - name:                              deployer_environment_parameter
-    displayName:                       Deployer Environment name (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           MGMT-WEEU-DEP00
+  - name: deployer_environment_parameter
+    displayName: Deployer Environment name (MGMT, DEV, QA, PRD, ...)
+    type: string
+    default: MGMT-WEEU-DEP00
 
-  - name:                              deployer_region_parameter
-    displayName:                       Deployer region name code (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           WEEU
+  - name: deployer_region_parameter
+    displayName: Deployer region name code (MGMT, DEV, QA, PRD, ...)
+    type: string
+    default: WEEU
     values:
       - AUCE
       - AUC2
@@ -67,262 +67,199 @@ parameters:
       - WEUS
       - WUS2
       - WUS3
-  - name:                              workload_environment_parameter
-    displayName:                       First Workload Environment name (MGMT, DEV, QA, PRD, ...)
-    type:                              string
-    default:                           DEV-WEEU-SAP01
+  - name: workload_environment_parameter
+    displayName: First Workload Environment name (MGMT, DEV, QA, PRD, ...)
+    type: string
+    default: DEV-WEEU-SAP01
 
-  - name:                              firewall
-    displayName:                       Deploy Azure Firewall
-    type:                              boolean
-    default:                           true
+  - name: firewall
+    displayName: Deploy Azure Firewall
+    type: boolean
+    default: true
 
-  - name:                              bastion
-    displayName:                       Deploy Azure Bastion Service
-    type:                              boolean
-    default:                           true
+  - name: bastion
+    displayName: Deploy Azure Bastion Service
+    type: boolean
+    default: true
 
-  - name:                              appservice
-    displayName:                       Deploy Azure App Service
-    type:                              boolean
-    default:                           false
+  - name: appservice
+    displayName: Deploy Azure App Service
+    type: boolean
+    default: false
 
-  - name:                              manageddevops
-    displayName:                       Deploy Azure Managed DevOps
-    type:                              boolean
-    default:                           true
+  - name: manageddevops
+    displayName: Deploy Azure Managed DevOps
+    type: boolean
+    default: false
 
-  - name:                              appconfig
-    displayName:                       Deploy Azure Application Configuration
-    type:                              boolean
-    default:                           true
+  - name: appconfig
+    displayName: Deploy Azure Application Configuration
+    type: boolean
+    default: true
 
+  - name: deployer_count
+    displayName: How many deployers to deploy
+    type: number
+    default: 1
 
-  - name:                              deployer_count
-    displayName:                       How many deployers to deploy
-    type:                              number
-    default:                           1
-
-  - name:                              identity
-    displayName:                       Use a Service Principal for deployments (legacy).
-    type:                              boolean
-    default:                           false
-
+  - name: identity
+    displayName: Use a Service Principal for deployments (legacy).
+    type: boolean
+    default: false
 
 variables:
-  - group:                             SDAF-${{ parameters.deployer_environment_parameter }}
+  - group: SDAF-${{ parameters.deployer_environment_parameter }}
 
-  - name:                              deployer_environment
-    value:                             ${{iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)) }}
+  - name: deployer_environment
+    value: ${{iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)) }}
 
-  - name:                              control_plane
-    value:                             ${{ parameters.deployer_environment_parameter }}
+  - name: control_plane
+    value: ${{ parameters.deployer_environment_parameter }}
 
-  - name:                              workload_environment
-    value:                             ${{ parameters.workload_environment_parameter }}
+  - name: workload_environment
+    value: ${{ parameters.workload_environment_parameter }}
 
-  - name:                              deployer_region
-    value:                             ${{ parameters.deployer_region_parameter }}
+  - name: deployer_region
+    value: ${{ parameters.deployer_region_parameter }}
 
-  - name:                              deployer_folder
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+  - name: deployer_folder
+    value: ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
-  - name:                              deployer_file
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+  - name: deployer_file
+    value: ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter), format('{0}-{1}-DEP01-INFRASTRUCTURE.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
-  - name:                              library_folder
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+  - name: library_folder
+    value: ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
-  - name:                              library_file
-    value:                             ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY.tfvars', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
+  - name: library_file
+    value: ${{ iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}-{1}-SAP_LIBRARY.tfvars', split(parameters.deployer_environment_parameter, '-')[0], split(parameters.deployer_environment_parameter, '-')[1]), format('{0}-{1}-SAP_LIBRARY.tfvars', parameters.deployer_environment_parameter, parameters.deployer_region_parameter)) }}
 
-  - name:                              deploy_firewall
-    value:                             ${{ format('firewall_deployment = {0}', lower(parameters.firewall)) }}
+  - name: deploy_firewall
+    value: ${{ format('firewall_deployment = {0}', lower(parameters.firewall)) }}
 
-  - name:                              deploy_bastion
-    value:                             ${{ format('bastion_deployment = {0}', lower(parameters.bastion)) }}
+  - name: deploy_bastion
+    value: ${{ format('bastion_deployment = {0}', lower(parameters.bastion)) }}
 
-  - name:                              deploy_appservice
-    value:                             ${{ format('app_service_deployment = {0}', lower(parameters.appservice)) }}
+  - name: deploy_appservice
+    value: ${{ format('app_service_deployment = {0}', lower(parameters.appservice)) }}
 
-  - name:                              deploy_manageddevops
-    value:                             ${{ format('dev_center_deployment = {0}', lower(parameters.manageddevops)) }}
+  - name: deploy_manageddevops
+    value: ${{ format('dev_center_deployment = {0}', lower(parameters.manageddevops)) }}
 
-  - name:                              deploy_appconfig
-    value:                             ${{ format('application_configuration_deployment = {0}', lower(parameters.appconfig)) }}
+  - name: deploy_appconfig
+    value: ${{ format('application_configuration_deployment = {0}', lower(parameters.appconfig)) }}
 
-  - name:                              deployer_count
-    value:                             ${{ format('deployer_count = {0}', parameters.deployer_count) }}
+  - name: deployer_count
+    value: ${{ format('deployer_count = {0}', parameters.deployer_count) }}
 
-  - name:                              use_spn
-    value:                             ${{ format('use_spn = {0}', lower(parameters.identity)) }}
+  - name: use_spn
+    value: ${{ format('use_spn = {0}', lower(parameters.identity)) }}
 
-  - name:                              calculated_dns
-    value:                             ${{ format('{0}.{1}.sdaf.contoso.net', iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)), lower(parameters.deployer_region_parameter)) }}
-  
-trigger:                               none
+  - name: calculated_dns
+    value: ${{ format('{0}.{1}.sdaf.contoso.net', iif(contains(parameters.deployer_environment_parameter, '-'), format('{0}', split(parameters.deployer_environment_parameter, '-')[0]), format('{0}', parameters.deployer_environment_parameter)), lower(parameters.deployer_region_parameter)) }}
+
+trigger: none
 
 stages:
-  - stage:                             Create_Configuration
-    displayName:                       Create Deployer Configuration
+  - stage: Create_Configuration
+    displayName: Create Deployer Configuration
     jobs:
-      - job:                           Create_Deployer_Configuration
-        displayName:                   Create Deployer Configuration
+      - job: Create_Deployer_Configuration
+        displayName: Create Deployer Configuration
         workspace:
-          clean:                       all
+          clean: all
         steps:
-          - checkout:                  self
-            persistCredentials:        true
-          - task:                      PowerShell@2
-            displayName:               "Create Sample"
+          - checkout: self
+            persistCredentials: true
+          - task: PowerShell@2
+            displayName: "Create Sample"
             inputs:
-              targetType:              "inline"
+              targetType: "inline"
               script: |
-                    git fetch -q --all
-                    git checkout -q $(Build.SourceBranchName)
-                    git pull
-                    git config --global user.email "$(Build.RequestedForEmail)"
-                    git config --global user.name "$(Build.RequestedFor)"
+                git fetch -q --all
+                git checkout -q $(Build.SourceBranchName)
+                git pull
+                git config --global user.email "$(Build.RequestedForEmail)"
+                git config --global user.name "$(Build.RequestedFor)"
 
-                    $FolderName = "WORKSPACES"
-                    $region = switch ("$(deployer_region)") {
-                     "auce" { "australiacentral" } 
-                     "auc2" { "australiacentral2" }
-                     "auea" { "australiaeast" }
-                     "ause" { "australiasoutheast" }
-                     "brso" { "brazilsouth" }
-                     "brse" { "brazilsoutheast" }
-                     "brus" { "brazilus" }
-                     "cace" { "canadacentral" }
-                     "caea" { "canadaeast" }
-                     "cein" { "centralindia" }
-                     "ceus" { "centralus"  }
-                     "ceua" { "centraluseuap" }
-                     "eaas" { "eastasia" }
-                     "eaus" { "eastus" }
-                     "eus2" { "eastus2" }
-                     "eusa" { "eastus2euap" }
-                     "eusg" { "eastusstg"  }
-                     "frce" { "francecentral" }
-                     "frso" { "francesouth" }
-                     "geno" { "germanynorth" }
-                     "gewc" { "germanywestcentral" }
-                     "isce" { "israelcentral" }
-                     "itno" { "italynorth" }
-                     "jaea" { "japaneast" }
-                     "jawe" { "japanwest" }
-                     "jinc" { "jioindiacentral" }
-                     "jinw" { "jioindiawest" }
-                     "koce" { "koreacentral" }
-                     "koso" { "koreasouth" }
-                     "ncus" { "northcentralus" }
-                     "noeu" { "northeurope" }
-                     "noea" { "norwayeast" }
-                     "nowe" { "norwaywest" }
-                     "nzno" { "newzealandnorth" } 
-                     "plce" { "polandcentral" }
-                     "qace" { "qatarcentral"       }
-                     "sano" { "southafricanorth" }
-                     "sawe" { "southafricawest" }
-                     "scus" { "southcentralus" }
-                     "scug" { "southcentralusstg"  }
-                     "soea" { "southeastasia" }
-                     "soin" { "southindia" }
-                     "sece" { "swedencentral" }
-                     "seso" { "swedensouth" }
-                     "swno" { "switzerlandnorth" }
-                     "swwe" { "switzerlandwest" }
-                     "uace" { "uaecentral" }
-                     "uano" { "uaenorth" }
-                     "ukso" { "uksouth" }
-                     "ukwe" { "ukwest" }
-                     "wcus" { "westcentralus" }
-                     "weeu" { "westeurope" }
-                     "wein" { "westindia"  }
-                     "weus" { "westus" }
-                     "wus2" { "westus2" }
-                     "wus3" { "westus3" }                    }
+                $FolderName = "WORKSPACES"
+                $region = switch ("$(deployer_region)") {
+                 "auce" { "australiacentral" } 
+                 "auc2" { "australiacentral2" }
+                 "auea" { "australiaeast" }
+                 "ause" { "australiasoutheast" }
+                 "brso" { "brazilsouth" }
+                 "brse" { "brazilsoutheast" }
+                 "brus" { "brazilus" }
+                 "cace" { "canadacentral" }
+                 "caea" { "canadaeast" }
+                 "cein" { "centralindia" }
+                 "ceus" { "centralus"  }
+                 "ceua" { "centraluseuap" }
+                 "eaas" { "eastasia" }
+                 "eaus" { "eastus" }
+                 "eus2" { "eastus2" }
+                 "eusa" { "eastus2euap" }
+                 "eusg" { "eastusstg"  }
+                 "frce" { "francecentral" }
+                 "frso" { "francesouth" }
+                 "geno" { "germanynorth" }
+                 "gewc" { "germanywestcentral" }
+                 "isce" { "israelcentral" }
+                 "itno" { "italynorth" }
+                 "jaea" { "japaneast" }
+                 "jawe" { "japanwest" }
+                 "jinc" { "jioindiacentral" }
+                 "jinw" { "jioindiawest" }
+                 "koce" { "koreacentral" }
+                 "koso" { "koreasouth" }
+                 "ncus" { "northcentralus" }
+                 "noeu" { "northeurope" }
+                 "noea" { "norwayeast" }
+                 "nowe" { "norwaywest" }
+                 "nzno" { "newzealandnorth" } 
+                 "plce" { "polandcentral" }
+                 "qace" { "qatarcentral"       }
+                 "sano" { "southafricanorth" }
+                 "sawe" { "southafricawest" }
+                 "scus" { "southcentralus" }
+                 "scug" { "southcentralusstg"  }
+                 "soea" { "southeastasia" }
+                 "soin" { "southindia" }
+                 "sece" { "swedencentral" }
+                 "seso" { "swedensouth" }
+                 "swno" { "switzerlandnorth" }
+                 "swwe" { "switzerlandwest" }
+                 "uace" { "uaecentral" }
+                 "uano" { "uaenorth" }
+                 "ukso" { "uksouth" }
+                 "ukwe" { "ukwest" }
+                 "wcus" { "westcentralus" }
+                 "weeu" { "westeurope" }
+                 "wein" { "westindia"  }
+                 "weus" { "westus" }
+                 "wus2" { "westus2" }
+                 "wus3" { "westus3" }                    }
 
-                    $msi_id_val = '$(MSI_ID)'
-                    $msi_id = if ($msi_id_val -match 'Microsoft\.ManagedIdentity') { 
-                        Write-Host "Using Managed Identity ($msi_id_val)"
-                        $msi_id_val.Trim() 
-                    }
-                    else { 
-                        Write-Host "Not using Managed Identity"
-                        "" 
-                    }
+                $msi_id_val = '$(MSI_ID)'
+                $msi_id = if ($msi_id_val -match 'Microsoft\.ManagedIdentity') { 
+                    Write-Host "Using Managed Identity ($msi_id_val)"
+                    $msi_id_val.Trim() 
+                }
+                else { 
+                    Write-Host "Not using Managed Identity"
+                    "" 
+                }
 
-                    $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
-                    $Full_FileName = (Join-Path -path $Full -ChildPath "$(deployer_file)")
+                $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "DEPLOYER" -ChildPath $(deployer_folder))
+                $Full_FileName = (Join-Path -path $Full -ChildPath "$(deployer_file)")
 
-                    if (Test-Path $Full) {
-                        cd $Full
+                if (Test-Path $Full) {
+                    cd $Full
 
-                        if (Test-Path $(deployer_file)) {
-                        }
-                        else {
-                            $DeployerFile = New-Item -Path . -Name $(deployer_file) -ItemType "file" -Value ("# Deployer Configuration File" + [Environment]::NewLine)
-                            Add-Content $(deployer_file) "environment = ""$(deployer_environment)"""
-                            Add-Content $(deployer_file) "location = ""$region"""
-                            Add-Content $(deployer_file) ""
-                            Add-Content $(deployer_file) "management_network_logical_name = ""DEP01"""
-                            Add-Content $(deployer_file) "management_network_address_space = ""10.170.20.0/24"""
-                            Add-Content $(deployer_file) "management_subnet_address_prefix = ""10.170.20.64/28"""
-
-                            Add-Content $(deployer_file) "$(deploy_firewall)"
-                            Add-Content $(deployer_file) "management_firewall_subnet_address_prefix = ""10.170.20.0/26"""
-
-                            Add-Content $(deployer_file) "$(deploy_bastion)"
-                            Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
-
-                            Add-Content $(deployer_file) "$(deploy_appservice)"
-                            Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/28"""
-
-                            Add-Content $(deployer_file) "$(deploy_manageddevops)"
-                            Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.96/27"""
-
-                            Add-Content $(deployer_file) "$(deploy_appconfig)"
-                            
-
-                            Add-Content $(deployer_file) "use_service_endpoint = true"
-                            Add-Content $(deployer_file) "use_private_endpoint = true"
-                            Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
-                            
-                            Add-Content $(deployer_file) "deployer_assign_subscription_permissions = false"
-
-                            Add-Content $(deployer_file) "public_network_access_enabled = true"
-
-                            Add-Content $(deployer_file) "enable_rbac_authorization = true"
-                            
-                            Add-Content $(deployer_file) "$(deployer_count)"
-
-                            Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
-                            Add-Content $(deployer_file) "$(use_spn)"
-                            if($msi_id.Length -gt 0)
-                            {
-                                Add-Content $(deployer_file) "user_assigned_identity_id=""$msi_id"""
-                            }
-                            else
-                            {
-                                Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
-                            }
-                            Add-Content $(deployer_file) ""
-                            Add-Content $(deployer_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
-                            Add-Content $(deployer_file) ""
-
-                            git add -f $(deployer_file)
-                            git commit -m "Added Control Plane configuration[skip ci]"
-
-                            git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-                        }
-
+                    if (Test-Path $(deployer_file)) {
                     }
                     else {
-                        #PowerShell Create directory if not exists
-                        cd $(Build.Repository.LocalPath)
-                        $Folder = New-Item $Full -ItemType Directory
-                        cd $Folder.FullName
                         $DeployerFile = New-Item -Path . -Name $(deployer_file) -ItemType "file" -Value ("# Deployer Configuration File" + [Environment]::NewLine)
                         Add-Content $(deployer_file) "environment = ""$(deployer_environment)"""
                         Add-Content $(deployer_file) "location = ""$region"""
@@ -336,28 +273,29 @@ stages:
 
                         Add-Content $(deployer_file) "$(deploy_bastion)"
                         Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
-                        
+
                         Add-Content $(deployer_file) "$(deploy_appservice)"
-                        
-                        Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
+                        Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/28"""
 
                         Add-Content $(deployer_file) "$(deploy_manageddevops)"
-                        Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.0/24"""
+                        Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.96/27"""
 
                         Add-Content $(deployer_file) "$(deploy_appconfig)"
-
-                        Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
-
-                        Add-Content $(deployer_file) "public_network_access_enabled = true"
-
-                        Add-Content $(deployer_file) "enable_rbac_authorization = true"
-
-                        Add-Content $(deployer_file) "$(deployer_count)"
+                        
 
                         Add-Content $(deployer_file) "use_service_endpoint = true"
                         Add-Content $(deployer_file) "use_private_endpoint = true"
                         Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
-                        Add-Content $(deployer_file) ""
+                        
+                        Add-Content $(deployer_file) "deployer_assign_subscription_permissions = false"
+
+                        Add-Content $(deployer_file) "public_network_access_enabled = true"
+
+                        Add-Content $(deployer_file) "enable_rbac_authorization = true"
+                        
+                        Add-Content $(deployer_file) "$(deployer_count)"
+
+                        Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
                         Add-Content $(deployer_file) "$(use_spn)"
                         if($msi_id.Length -gt 0)
                         {
@@ -367,18 +305,6 @@ stages:
                         {
                             Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
                         }
-
-                        Add-Content $(deployer_file) ""
- 
-                        Add-Content $(deployer_file) "deployer_image = {"
-                        Add-Content $(deployer_file) "  os_type         = ""LINUX"","
-                        Add-Content $(deployer_file) "  type            = ""marketplace"","
-                        Add-Content $(deployer_file) "  source_image_id = """""
-                        Add-Content $(deployer_file) "  publisher       = ""Canonical"","
-                        Add-Content $(deployer_file) "  offer           = ""ubuntu-24_04-lts"","
-                        Add-Content $(deployer_file) "  sku             = ""server"","
-                        Add-Content $(deployer_file) "  version         = ""latest"""
-                        Add-Content $(deployer_file) "}"
                         Add-Content $(deployer_file) ""
                         Add-Content $(deployer_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
                         Add-Content $(deployer_file) ""
@@ -389,66 +315,139 @@ stages:
                         git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
                     }
 
-                    $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "LIBRARY" -ChildPath $(library_folder))
-                    $Full_FileName = (Join-Path -path $Full -ChildPath "$(library_file)")
+                }
+                else {
+                    #PowerShell Create directory if not exists
                     cd $(Build.Repository.LocalPath)
+                    $Folder = New-Item $Full -ItemType Directory
+                    cd $Folder.FullName
+                    $DeployerFile = New-Item -Path . -Name $(deployer_file) -ItemType "file" -Value ("# Deployer Configuration File" + [Environment]::NewLine)
+                    Add-Content $(deployer_file) "environment = ""$(deployer_environment)"""
+                    Add-Content $(deployer_file) "location = ""$region"""
+                    Add-Content $(deployer_file) ""
+                    Add-Content $(deployer_file) "management_network_logical_name = ""DEP01"""
+                    Add-Content $(deployer_file) "management_network_address_space = ""10.170.20.0/24"""
+                    Add-Content $(deployer_file) "management_subnet_address_prefix = ""10.170.20.64/28"""
 
-                    if (Test-Path $Full) {
-                        cd $Full
+                    Add-Content $(deployer_file) "$(deploy_firewall)"
+                    Add-Content $(deployer_file) "management_firewall_subnet_address_prefix = ""10.170.20.0/26"""
 
-                        if (Test-Path $(library_file)) {
-                        }
-                        else {
-                            $LibraryFile = New-Item -Path . -Name $(library_file) -ItemType "file" -Value ("# Library Configuration File" + [Environment]::NewLine)
-                            Add-Content $(library_file) "environment = ""$(deployer_environment)"""
-                            Add-Content $(library_file) "location = ""$region"""
-                            Add-Content $(library_file) ""
-                            Add-Content $(library_file) 
-                            Add-Content $(library_file) "use_private_endpoint = true"
-                            Add-Content $(library_file) "$(use_spn)"
-                            Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
-                            Add-Content $(library_file) ""
-                            Add-Content $(library_file) ""
-                            Add-Content $(library_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
-                            Add-Content $(library_file) ""
+                    Add-Content $(deployer_file) "$(deploy_bastion)"
+                    Add-Content $(deployer_file) "management_bastion_subnet_address_prefix = ""10.170.20.128/26"""
+                    
+                    Add-Content $(deployer_file) "$(deploy_appservice)"
+                    
+                    Add-Content $(deployer_file) "webapp_subnet_address_prefix = ""10.170.20.192/27"""
 
-                            git add -f $(library_file)
-                            git commit -m "Added Control Plane Library configuration[skip ci]"
+                    Add-Content $(deployer_file) "$(deploy_manageddevops)"
+                    Add-Content $(deployer_file) "agent_subnet_address_prefix = ""10.170.20.0/24"""
 
-                            git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-                        }
+                    Add-Content $(deployer_file) "$(deploy_appconfig)"
 
+                    Add-Content $(deployer_file) "deployer_assign_subscription_permissions = true"
+
+                    Add-Content $(deployer_file) "public_network_access_enabled = true"
+
+                    Add-Content $(deployer_file) "enable_rbac_authorization = true"
+
+                    Add-Content $(deployer_file) "$(deployer_count)"
+
+                    Add-Content $(deployer_file) "use_service_endpoint = true"
+                    Add-Content $(deployer_file) "use_private_endpoint = true"
+                    Add-Content $(deployer_file) "enable_firewall_for_keyvaults_and_storage = true"
+                    Add-Content $(deployer_file) ""
+                    Add-Content $(deployer_file) "$(use_spn)"
+                    if($msi_id.Length -gt 0)
+                    {
+                        Add-Content $(deployer_file) "user_assigned_identity_id=""$msi_id"""
+                    }
+                    else
+                    {
+                        Add-Content $(deployer_file) "#user_assigned_identity_id=""<user_assigned_identity_id>"""
+                    }
+
+                    Add-Content $(deployer_file) ""
+
+                    Add-Content $(deployer_file) "deployer_image = {"
+                    Add-Content $(deployer_file) "  os_type         = ""LINUX"","
+                    Add-Content $(deployer_file) "  type            = ""marketplace"","
+                    Add-Content $(deployer_file) "  source_image_id = """""
+                    Add-Content $(deployer_file) "  publisher       = ""Canonical"","
+                    Add-Content $(deployer_file) "  offer           = ""ubuntu-24_04-lts"","
+                    Add-Content $(deployer_file) "  sku             = ""server"","
+                    Add-Content $(deployer_file) "  version         = ""latest"""
+                    Add-Content $(deployer_file) "}"
+                    Add-Content $(deployer_file) ""
+                    Add-Content $(deployer_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                    Add-Content $(deployer_file) ""
+
+                    git add -f $(deployer_file)
+                    git commit -m "Added Control Plane configuration[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
+
+                $Full = Join-Path -Path $($FolderName) -ChildPath (Join-Path -Path "LIBRARY" -ChildPath $(library_folder))
+                $Full_FileName = (Join-Path -path $Full -ChildPath "$(library_file)")
+                cd $(Build.Repository.LocalPath)
+
+                if (Test-Path $Full) {
+                    cd $Full
+
+                    if (Test-Path $(library_file)) {
                     }
                     else {
-                        #PowerShell Create directory if not exists
-                        Write-Host "Creating Library directory"
-                        cd $(Build.Repository.LocalPath)
-                        $Folder = New-Item $Full -ItemType Directory
-                        cd $Full
-                        Write-Host "Creating Library file"
                         $LibraryFile = New-Item -Path . -Name $(library_file) -ItemType "file" -Value ("# Library Configuration File" + [Environment]::NewLine)
                         Add-Content $(library_file) "environment = ""$(deployer_environment)"""
                         Add-Content $(library_file) "location = ""$region"""
                         Add-Content $(library_file) ""
+                        Add-Content $(library_file) 
                         Add-Content $(library_file) "use_private_endpoint = true"
                         Add-Content $(library_file) "$(use_spn)"
                         Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
                         Add-Content $(library_file) ""
+                        Add-Content $(library_file) ""
                         Add-Content $(library_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
                         Add-Content $(library_file) ""
+
                         git add -f $(library_file)
                         git commit -m "Added Control Plane Library configuration[skip ci]"
 
                         git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-
                     }
 
+                }
+                else {
+                    #PowerShell Create directory if not exists
+                    Write-Host "Creating Library directory"
                     cd $(Build.Repository.LocalPath)
-                    $FolderName = "pipelines"
+                    $Folder = New-Item $Full -ItemType Directory
+                    cd $Full
+                    Write-Host "Creating Library file"
+                    $LibraryFile = New-Item -Path . -Name $(library_file) -ItemType "file" -Value ("# Library Configuration File" + [Environment]::NewLine)
+                    Add-Content $(library_file) "environment = ""$(deployer_environment)"""
+                    Add-Content $(library_file) "location = ""$region"""
+                    Add-Content $(library_file) ""
+                    Add-Content $(library_file) "use_private_endpoint = true"
+                    Add-Content $(library_file) "$(use_spn)"
+                    Add-Content $(library_file) "dns_label = ""$(calculated_dns)"""
+                    Add-Content $(library_file) ""
+                    Add-Content $(library_file) "subscription_id=""$(ARM_SUBSCRIPTION_ID)"""
+                    Add-Content $(library_file) ""
+                    git add -f $(library_file)
+                    git commit -m "Added Control Plane Library configuration[skip ci]"
+
+                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+
+                }
+
+                cd $(Build.Repository.LocalPath)
+                $FolderName = "pipelines"
 
 
-                    $pipeLineName="22-sample-deployer-configuration.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="22-sample-deployer-configuration.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                if ( (Test-Path $filePath)) {
 
                     (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(deployer_folder)") | Set-Content $filePath
                     (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
@@ -457,113 +456,128 @@ stages:
                     git add -f $filePath
                     git commit -m "Update $pipeLineName[skip ci]"
                     git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  }
 
-                    $pipeLineName="01-deploy-control-plane.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="01-deploy-control-plane.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    $pipeLineName="12-remove-control-plane.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="12-remove-control-plane.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    $pipeLineName="02-sap-workload-zone.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="02-sap-workload-zone.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
-                    
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    $pipeLineName="03-sap-system-deployment.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="03-sap-system-deployment.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    $pipeLineName="04-sap-software-download.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="04-sap-software-download.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    $pipeLineName="04-sap-software-download_v2.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                $pipeLineName="04-sap-software-download_v2.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                if ( (Test-Path $filePath)) {
+                (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                git add -f $filePath
+                git commit -m "Update $pipeLineName[skip ci]"
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-                    
-                    $pipeLineName="pipelines/14-show-BOMS.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                $pipeLineName="10-remover-terraform.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
+                  (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-                    
-                    
-                    $pipeLineName="10-remover-terraform.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("WEEU","$(deployer_region)") | Set-Content $filePath
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                $pipeLineName="11-remover-arm-fallback.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                if ( (Test-Path $filePath)) {
+                
+                (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
+                (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
+                (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
+                (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
+              
+                git add -f $filePath
+                git commit -m "Update $pipeLineName[skip ci]"
 
-                    $pipeLineName="11-remover-arm-fallback.yml"
-                    $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                }
 
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00-INFRASTRUCTURE","$(deployer_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-SAP_LIBRARY","$(library_folder)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
-                    (Get-Content $filePath).Replace("DEV-WEEU-SAP01","$(workload_environment)") | Set-Content $filePath
+                $pipeLineName="pipelines/14-show-BOMS.yml"
+                $filePath = (Join-Path -path $FolderName -ChildPath $pipeLineName)
+                if ( (Test-Path $filePath)) {
+                  (Get-Content $filePath).Replace("MGMT-WEEU-DEP00","$(control_plane)") | Set-Content $filePath
 
-                    git add -f $filePath
-                    git commit -m "Update $pipeLineName[skip ci]"
+                  git add -f $filePath
+                  git commit -m "Update $pipeLineName[skip ci]"
 
-                    git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
-                    
+                  git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" push --set-upstream origin $(Build.SourceBranchName)
+                  }
+                }
 
-
-              failOnStderr:            false
-              showWarnings:            true
-              pwsh:                    true
+              failOnStderr: false
+              showWarnings: true
+              pwsh: true
